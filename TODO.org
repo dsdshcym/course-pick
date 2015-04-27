@@ -1,4 +1,28 @@
 * Todos
+** DONE Course Models       <2015-04-27 Mon 20:15>
+CLOSED: [2015-04-27 Mon 20:16]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2015-04-27 Mon 20:16]
+:END:
+- 课程
+  + _课程号_
+  + 课程名
+  + 学分
+  + 开课院系
+  + 人数
+  + 上课地点
+  + 备注
+- 课程-上课时间
+  + _课程号_
+  + _星期_
+  + 开始时间
+  + 结束时间
+- 课程-考试
+  + _课程号_
+  + _形式_
+  + 日期
+  + 时间
+ Link: file:~/GitHub/course_pick/courses/models.py::end%20%3D%20models.PositiveSmallIntegerField()
 ** TODO 登录
 ** TODO 注册
 ** TODO 学生
