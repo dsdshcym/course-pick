@@ -7,7 +7,7 @@ class Student(models.Model):
     Student information
     """
     id = models.CharField(max_length=20, primary_key=True)
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     name = models.CharField(max_length=20)
 
 class Teacher(models.Model):
@@ -15,7 +15,7 @@ class Teacher(models.Model):
     Teacherr information
     """
     id = models.CharField(max_length=20, primary_key=True)
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     name = models.CharField(max_length=20)
     title = models.CharField(max_length=20)
 
@@ -24,5 +24,5 @@ class Manager(models.Model):
     Manager information
     """
     id = models.CharField(max_length=20, primary_key=True)
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     name = models.CharField(max_length=20)
