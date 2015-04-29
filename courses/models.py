@@ -18,6 +18,9 @@ class Course(models.Model):
     student = models.ManyToManyField(Student)
     teacher = models.ManyToManyField(Teacher)
 
+    def __unicode__(self):
+        return self.name
+
 class Exam(models.Model):
     """
     A Course's Final Exam informations
@@ -33,7 +36,10 @@ class Exam(models.Model):
     course = models.OneToOneField(Course, primary_key=True)
     method = models.CharField(choices=EXAM_METHOD_CHOICES, default=BJ, max_length=10)
     date = models.DateField()
-    time = models.TimeField()
+    time = models.TimeField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.course.__unicode__() + '_' + self.get_method_display()
 
 class CourseTime(models.Model):
     """
@@ -68,3 +74,6 @@ class CourseTime(models.Model):
     weekday = models.CharField(max_length=3, choices=WEEKDAY_CHOICES)
     begin = models.PositiveSmallIntegerField(choices=COURSE_TIME_CHOICES)
     end = models.PositiveSmallIntegerField(choices=COURSE_TIME_CHOICES)
+
+    def __unicode__(self):
+        return self.course.__unicode__() + '_' + self.get_weekday_display()
