@@ -116,9 +116,7 @@ class TeacherRegisterTest(TestCase):
         login = client.login(username=saved_user.username, password=saved_user.password)
 
         # print saved_user.get_all_permissions()
-        self.assertTrue(saved_user.has_perm('courses.add_course'))
         self.assertTrue(saved_user.has_perm('courses.change_course'))
-        self.assertTrue(saved_user.has_perm('courses.delete_course'))
 
 class ManagerRegisterTest(TestCase):
     test_manager_id = 'm001'
