@@ -8,20 +8,21 @@ from accounts.views import register
 
 class RegisterTest(TestCase):
 
-    def test_student_register(self):
+    def create_one_student_register_request(self):
         test_student = Student(
             id='s001',
             name='test_stu'
         )
+        request = create_register_request(
+            test_student.id,
+            test_student.name,
+            '1234',
+            'student',
+        )
+        return test_student, request
 
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST = {
-            'id'       : test_student.id,
-            'name'     : test_student.name,
-            'password' : '1234',
-            'type'     : 'student',
-        }
+    def test_student_register_create_correct_user(self):
+        test_student, request = self.create_one_student_register_request()
 
         response = register(request)
 
@@ -32,14 +33,24 @@ class RegisterTest(TestCase):
         self.assertEqual(first_user.username, 's001')
         self.assertTrue(first_user.check_password('1234'))
 
-        saved_student = first_user.student
-        self.assertEqual(saved_student.id, test_student.id)
-        self.assertEqual(saved_student.name, test_student.name)
+    def test_student_register_create_correct_student(self):
+        test_student, request = self.create_one_student_register_request()
+
+        response = register(request)
 
         student = Student.objects.all()
+        first_student = student[0]
+        self.assertEqual(first_student.id, test_student.id)
+        self.assertEqual(first_student.name, test_student.name)
+
         self.assertEqual(student.count(), 1)
 
-        first_student = student[0]
-        self.assertEqual(first_student, saved_student)
+    def test_student_register_create_correct_student_user_relation(self):
+        test_student, request = self.create_one_student_register_request()
 
-        # self.assertTrue(first_user.check_password('1234'))
+        response = register(request)
+
+        saved_user = User.objects.all()[0]
+        saved_student = Student.objects.all()[0]
+
+        self.assertEqual(saved_student, saved_user.student)
