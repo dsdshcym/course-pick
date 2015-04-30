@@ -12,10 +12,14 @@ def register(request):
         type = request.POST['type']
         new_user = User.objects.create_user(username=id, password=password)
 
-        if type == 'student':
+        if type == Student.user_type:
             new_student = Student.objects.create(id = id, user=new_user, name=name)
 
-        if type == 'teacher':
+        if type == Teacher.user_type:
             title = request.POST['title']
             new_teacher = Teacher.objects.create(id = id, user=new_user, name=name, title=title)
+
+        if type == Manager.user_type:
+            new_manager = Manager.objects.create(id = id, user=new_user, name=name)
+
         return redirect('/')
