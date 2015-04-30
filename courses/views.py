@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from courses.models import Course, Exam, CourseTime
 
-def create_course(request):
+def add_course(request):
     if request.method == 'POST':
         Course.objects.create(
             id=request.POST['id'],
