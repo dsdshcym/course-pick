@@ -30,6 +30,16 @@ class RegisterTest(TestCase):
         }
         return request
 
+    def setUp(self):
+        self.first_student_request = self.create_one_student_register_request()
+        self.first_student_response = register(self.first_student_request)
+
+        self.first_teacher_request = self.create_one_teacher_register_request()
+        self.first_teacher_response = register(self.first_teacher_request)
+
+        self.first_manager_request = self.create_one_manager_register_request()
+        self.first_manager_response = register(self.first_manager_request)
+
     # Student Tests
     def create_one_student_register_request(self):
         request = self.create_register_request(
@@ -41,11 +51,7 @@ class RegisterTest(TestCase):
         return request
 
     def test_student_register_create_correct_user(self):
-        request = self.create_one_student_register_request()
-
-        response = register(request)
-
-        user = User.objects.all()
+        user = User.objects.filter(username=self.test_student_id)
         self.assertEqual(user.count(), 1)
 
         first_user = user[0]
@@ -53,11 +59,7 @@ class RegisterTest(TestCase):
         self.assertTrue(first_user.check_password(self.test_password))
 
     def test_student_register_create_correct_student(self):
-        request = self.create_one_student_register_request()
-
-        response = register(request)
-
-        student = Student.objects.all()
+        student = Student.objects.filter(id=self.test_student_id)
         self.assertEqual(student.count(), 1)
 
         first_student = student[0]
@@ -65,12 +67,8 @@ class RegisterTest(TestCase):
         self.assertEqual(first_student.name, self.test_student_name)
 
     def test_student_register_create_correct_student_user_relation(self):
-        request = self.create_one_student_register_request()
-
-        response = register(request)
-
-        saved_user = User.objects.all()[0]
-        saved_student = Student.objects.all()[0]
+        saved_user = User.objects.get(username=self.test_student_id)
+        saved_student = Student.objects.get(id=self.test_student_id)
 
         self.assertEqual(saved_student, saved_user.student)
 
@@ -86,11 +84,7 @@ class RegisterTest(TestCase):
         return request
 
     def test_teacher_register_create_correct_user(self):
-        request = self.create_one_teacher_register_request()
-
-        response = register(request)
-
-        user = User.objects.all()
+        user = User.objects.filter(username=self.test_teacher_id)
         self.assertEqual(user.count(), 1)
 
         first_user = user[0]
@@ -98,11 +92,7 @@ class RegisterTest(TestCase):
         self.assertTrue(first_user.check_password(self.test_password))
 
     def test_teacher_register_create_correct_teacher(self):
-        request = self.create_one_teacher_register_request()
-
-        response = register(request)
-
-        teacher = Teacher.objects.all()
+        teacher = Teacher.objects.filter(id=self.test_teacher_id)
         self.assertEqual(teacher.count(), 1)
 
         first_teacher = teacher[0]
@@ -110,12 +100,8 @@ class RegisterTest(TestCase):
         self.assertEqual(first_teacher.name, self.test_teacher_name)
 
     def test_teacher_register_create_correct_teacher_user_relation(self):
-        request = self.create_one_teacher_register_request()
-
-        response = register(request)
-
-        saved_user = User.objects.all()[0]
-        saved_teacher = Teacher.objects.all()[0]
+        saved_user = User.objects.get(username=self.test_teacher_id)
+        saved_teacher = Teacher.objects.get(id=self.test_teacher_id)
 
         self.assertEqual(saved_teacher, saved_user.teacher)
 
@@ -130,11 +116,7 @@ class RegisterTest(TestCase):
         return request
 
     def test_manager_register_create_correct_user(self):
-        request = self.create_one_manager_register_request()
-
-        response = register(request)
-
-        user = User.objects.all()
+        user = User.objects.filter(username=self.test_manager_id)
         self.assertEqual(user.count(), 1)
 
         first_user = user[0]
@@ -142,11 +124,7 @@ class RegisterTest(TestCase):
         self.assertTrue(first_user.check_password(self.test_password))
 
     def test_manager_register_create_correct_manager(self):
-        request = self.create_one_manager_register_request()
-
-        response = register(request)
-
-        manager = Manager.objects.all()
+        manager = Manager.objects.filter(id=self.test_manager_id)
         self.assertEqual(manager.count(), 1)
 
         first_manager = manager[0]
@@ -154,11 +132,7 @@ class RegisterTest(TestCase):
         self.assertEqual(first_manager.name, self.test_manager_name)
 
     def test_manager_register_create_correct_manager_user_relation(self):
-        request = self.create_one_manager_register_request()
-
-        response = register(request)
-
-        saved_user = User.objects.all()[0]
-        saved_manager = Manager.objects.all()[0]
+        saved_user = User.objects.get(username=self.test_manager_id)
+        saved_manager = Manager.objects.get(id=self.test_manager_id)
 
         self.assertEqual(saved_manager, saved_user.manager)
