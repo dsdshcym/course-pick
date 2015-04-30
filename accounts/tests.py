@@ -1,48 +1,34 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.http import HttpRequest
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 
 from accounts.models import Student, Teacher, Manager
 from accounts.views import register
 
-class RegisterTest(TestCase):
+def create_register_request(id, name, password, type):
+    request = HttpRequest()
+    request.method = 'POST'
+    request.POST = {
+        'id'       : id,
+        'name'     : name,
+        'password' : password,
+        'type'     : type,
+    }
+    return request
+
+class StudentRegisterTest(TestCase):
     test_student_id = 's001'
     test_student_name = 'test_student'
 
-    test_teacher_id = 't001'
-    test_teacher_name = 'test_teacher'
-    test_teacher_title = 'test_title'
-
-    test_manager_id = 'm001'
-    test_manager_name = 'test_manager'
-
     test_password = '1234'
-
-    def create_register_request(self, id, name, password, type):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST = {
-            'id'       : id,
-            'name'     : name,
-            'password' : password,
-            'type'     : type,
-        }
-        return request
 
     def setUp(self):
         self.first_student_request = self.create_one_student_register_request()
         self.first_student_response = register(self.first_student_request)
 
-        self.first_teacher_request = self.create_one_teacher_register_request()
-        self.first_teacher_response = register(self.first_teacher_request)
-
-        self.first_manager_request = self.create_one_manager_register_request()
-        self.first_manager_response = register(self.first_manager_request)
-
-    # Student Tests
     def create_one_student_register_request(self):
-        request = self.create_register_request(
+        request = create_register_request(
             self.test_student_id,
             self.test_student_name,
             self.test_password,
@@ -72,9 +58,19 @@ class RegisterTest(TestCase):
 
         self.assertEqual(saved_student, saved_user.student)
 
-    # Teacher Tests
+class TeacherRegisterTest(TestCase):
+    test_teacher_id = 't001'
+    test_teacher_name = 'test_teacher'
+    test_teacher_title = 'test_title'
+
+    test_password = '12345'
+
+    def setUp(self):
+        self.first_teacher_request = self.create_one_teacher_register_request()
+        self.first_teacher_response = register(self.first_teacher_request)
+
     def create_one_teacher_register_request(self):
-        request = self.create_register_request(
+        request = create_register_request(
             self.test_teacher_id,
             self.test_teacher_name,
             self.test_password,
@@ -105,9 +101,18 @@ class RegisterTest(TestCase):
 
         self.assertEqual(saved_teacher, saved_user.teacher)
 
-    # Manager Tests
+class ManagerRegisterTest(TestCase):
+    test_manager_id = 'm001'
+    test_manager_name = 'test_manager'
+
+    test_password = '123456'
+
+    def setUp(self):
+        self.first_manager_request = self.create_one_manager_register_request()
+        self.first_manager_response = register(self.first_manager_request)
+
     def create_one_manager_register_request(self):
-        request = self.create_register_request(
+        request = create_register_request(
             self.test_manager_id,
             self.test_manager_name,
             self.test_password,
