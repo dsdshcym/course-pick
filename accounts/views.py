@@ -1,3 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-# Create your views here.
+from django.contrib.auth.models import User, Group
+
+from accounts.models import Student, Teacher, Manager
+
+def register(request):
+    if request.method == 'POST':
+        id = request.POST['id']
+        name = request.POST['name']
+        password = request.POST['password']
+        type = request.POST['type']
+        new_user = User.objects.create_user(username=id, password=password)
+
+        if type == 'student':
+            new_student = Student.objects.create(id = id, user=new_user, name=name)
+        return redirect('/')
