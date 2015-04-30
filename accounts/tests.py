@@ -58,6 +58,14 @@ class StudentRegisterTest(TestCase):
 
         self.assertEqual(saved_student, saved_user.student)
 
+    def test_student_register_create_user_with_correct_permissions(self):
+        saved_user = User.objects.get(username=self.test_student_id)
+
+        client = Client()
+        login = client.login(username=saved_user.username, password=self.test_password)
+
+        self.assertTrue(saved_user.has_perm('courses.change_course'))
+
 class TeacherRegisterTest(TestCase):
     test_teacher_id = 't001'
     test_teacher_name = 'test_teacher'
@@ -101,6 +109,17 @@ class TeacherRegisterTest(TestCase):
 
         self.assertEqual(saved_teacher, saved_user.teacher)
 
+    def test_teacher_register_create_user_with_correct_permissions(self):
+        saved_user = User.objects.get(username=self.test_teacher_id)
+
+        client = Client()
+        login = client.login(username=saved_user.username, password=saved_user.password)
+
+        # print saved_user.get_all_permissions()
+        self.assertTrue(saved_user.has_perm('courses.add_course'))
+        self.assertTrue(saved_user.has_perm('courses.change_course'))
+        self.assertTrue(saved_user.has_perm('courses.delete_course'))
+
 class ManagerRegisterTest(TestCase):
     test_manager_id = 'm001'
     test_manager_name = 'test_manager'
@@ -141,3 +160,14 @@ class ManagerRegisterTest(TestCase):
         saved_manager = Manager.objects.get(id=self.test_manager_id)
 
         self.assertEqual(saved_manager, saved_user.manager)
+
+    def test_manager_register_create_user_with_correct_permissions(self):
+        saved_user = User.objects.get(username=self.test_manager_id)
+
+        client = Client()
+        login = client.login(username=saved_user.username, password=saved_user.password)
+
+        # print saved_user.get_all_permissions()
+        self.assertTrue(saved_user.has_perm('courses.add_course'))
+        self.assertTrue(saved_user.has_perm('courses.change_course'))
+        self.assertTrue(saved_user.has_perm('courses.delete_course'))
