@@ -1,6 +1,8 @@
 from django.test import TestCase
+from django.http import HttpRequest
 
 from courses.models import Course
+from courses.views import create_course
 
 class CourseModelTest(TestCase):
 
@@ -24,3 +26,26 @@ class CourseModelTest(TestCase):
         second_saved_item = saved_courses[1]
         self.assertEqual(first_saved_item.name, 'first_test_course')
         self.assertEqual(second_saved_item.name, 'second_test_course')
+
+class CreateCourseTest(TestCase):
+
+    def test_manager_can_create_a_new_course(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'id'                 : '0001',
+            'name'               : 'test',
+            'college'            : 'CS',
+            'classroom'          : 'Z2101',
+            'score'              : 2.0,
+            'max_student_number' : 20,
+            'remark'             : '',
+        }
+
+        print request.POST
+
+        response = create_course(request)
+
+        self.assertEqual(Course.objects.count(), 1)
+        new_course = Course.objects.first()
+        self.assertEqual(new_course.name, 'test')
