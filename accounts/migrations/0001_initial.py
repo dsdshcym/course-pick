@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.CharField(max_length=20, serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=20)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.CharField(max_length=20, serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=20)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('id', models.CharField(max_length=20, serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=20)),
                 ('title', models.CharField(max_length=20)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

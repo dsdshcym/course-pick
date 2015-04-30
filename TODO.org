@@ -1,4 +1,22 @@
 * Todos
+** TODO 登录
+** TODO 注册
+** TODO 学生
+*** TODO 增
+*** TODO 删
+*** TODO 改
+*** TODO 查
+**** TODO 课程时间冲突
+**** TODO 按照开课院系的不同
+** TODO 教务员
+*** TODO 修改课程的学生
+*** TODO 修改课程的老师
+** TODO 老师
+（自己课程内）
+*** TODO 增
+*** TODO 删
+*** TODO 改
+*** TODO 查
 ** DONE Course Models       <2015-04-27 Mon 20:15>
 CLOSED: [2015-04-27 Mon 20:16]
 :LOGBOOK:
@@ -23,21 +41,16 @@ CLOSED: [2015-04-27 Mon 20:16]
   + 日期
   + 时间
  Link: file:~/GitHub/course_pick/courses/models.py::end%20%3D%20models.PositiveSmallIntegerField()
-** TODO 登录
-** TODO 注册
-** TODO 学生
-*** TODO 增
-*** TODO 删
-*** TODO 改
-*** TODO 查
-**** TODO 课程时间冲突
-**** TODO 按照开课院系的不同
-** TODO 教务员
-*** TODO 修改课程的学生
-*** TODO 修改课程的老师
-** TODO 老师
-（自己课程内）
-*** TODO 增
-*** TODO 删
-*** TODO 改
-*** TODO 查
+** DONE Change ForeignKey to OnetoOneField
+CLOSED: [2015-04-28 Tue 21:43]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2015-04-28 Tue 21:43]
+:END:
+<2015-04-28 Tue 09:44>
+Link: file:~/GitHub/course_pick/accounts/models.py::from%20django.db%20import%20models
+** DONE Add Permissions Test      <2015-04-30 Thu 15:10>
+CLOSED: [2015-04-30 Thu 17:46]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2015-04-30 Thu 17:46]
+:END:
+ Link: file:~/GitHub/course_pick/accounts/tests.py
