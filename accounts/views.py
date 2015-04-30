@@ -14,4 +14,8 @@ def register(request):
 
         if type == 'student':
             new_student = Student.objects.create(id = id, user=new_user, name=name)
+
+        if type == 'teacher':
+            title = request.POST['title']
+            new_teacher = Teacher.objects.create(id = id, user=new_user, name=name, title=title)
         return redirect('/')
