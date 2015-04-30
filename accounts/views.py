@@ -4,8 +4,8 @@ from django.contrib.auth.models import User, Permission
 
 from accounts.models import Student, Teacher, Manager
 
-STUDENT_PERMISSION = Permission.objects.get(codename='change_course')
-TEACHER_PERMISSION = Permission.objects.filter(codename__endswith='course')
+STUDENT_PERMISSION = Permission.objects.filter(codename='change_course')
+TEACHER_PERMISSION = Permission.objects.filter(codename='change_course')
 MANAGER_PERMISSION = Permission.objects.filter(codename__endswith='course')
 
 def register(request):
@@ -18,7 +18,7 @@ def register(request):
 
         if type == Student.user_type:
             new_student = Student.objects.create(id = id, user=new_user, name=name)
-            new_user.user_permissions.add(STUDENT_PERMISSION)
+            new_user.user_permissions = STUDENT_PERMISSION
 
         if type == Teacher.user_type:
             title = request.POST['title']
