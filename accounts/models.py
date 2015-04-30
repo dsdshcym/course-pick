@@ -10,6 +10,9 @@ class Student(models.Model):
     user = models.OneToOneField(User)
     name = models.CharField(max_length=20)
 
+    def __unicode__(self):
+        return "S: %s_%s" % (self.id, self.name)
+
 class Teacher(models.Model):
     """
     Teacherr information
@@ -19,6 +22,9 @@ class Teacher(models.Model):
     name = models.CharField(max_length=20)
     title = models.CharField(max_length=20)
 
+    def __unicode__(self):
+        return "T: %s_%s_%s" % (self.id, self.name, self.title)
+
 class Manager(models.Model):
     """
     Manager information
@@ -26,3 +32,6 @@ class Manager(models.Model):
     id = models.CharField(max_length=20, primary_key=True)
     user = models.OneToOneField(User)
     name = models.CharField(max_length=20)
+
+    def __unicode__(self):
+        return "M: %s_%s" % (self.id, self.name)
