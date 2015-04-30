@@ -14,6 +14,9 @@ class RegisterTest(TestCase):
     test_teacher_name = 'test_teacher'
     test_teacher_title = 'test_title'
 
+    test_manager_id = 'm001'
+    test_manager_name = 'test_manager'
+
     test_password = '1234'
 
     def create_register_request(self, id, name, password, type):
@@ -33,7 +36,7 @@ class RegisterTest(TestCase):
             self.test_student_id,
             self.test_student_name,
             self.test_password,
-            'student',
+            Student.user_type,
         )
         return request
 
@@ -77,7 +80,7 @@ class RegisterTest(TestCase):
             self.test_teacher_id,
             self.test_teacher_name,
             self.test_password,
-            'teacher',
+            Teacher.user_type,
         )
         request.POST['title'] = self.test_teacher_title
         return request
@@ -91,7 +94,7 @@ class RegisterTest(TestCase):
         self.assertEqual(user.count(), 1)
 
         first_user = user[0]
-        self.assertEqual(first_user.username, 't001')
+        self.assertEqual(first_user.username, self.test_teacher_id)
         self.assertTrue(first_user.check_password(self.test_password))
 
     def test_teacher_register_create_correct_teacher(self):
