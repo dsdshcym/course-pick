@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 
 from accounts.models import Student, Teacher
 
@@ -29,6 +29,7 @@ def delete_course(request):
         course.delete()
         return redirect('/')
 
+@login_required
 def pick_course(request):
     if request.method == 'POST':
         student_id = request.POST['student_id']

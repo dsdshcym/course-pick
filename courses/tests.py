@@ -2,6 +2,8 @@ from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.core import exceptions
 
+from django.contrib.auth.models import User
+
 from accounts.models import Student, Teacher, Manager
 from accounts.views import register
 from accounts.tests import create_register_request
@@ -165,6 +167,7 @@ class PickCourseViewTest(TestCase):
             'student_id': self.test_student.id,
             'course_id': self.test_course.id,
         }
+        request.user = User.objects.get(student=self.test_student)
         response = pick_course(request)
 
         self.assertEqual(self.test_course.student.count(), 1)
@@ -180,6 +183,7 @@ class PickCourseViewTest(TestCase):
             'student_id': self.test_student.id,
             'course_id': self.test_course.id,
         }
+        request.user = User.objects.get(teacher=self.test_teacher)
         response = pick_course(request)
 
         self.assertEqual(self.test_course.student.count(), 1)
@@ -195,6 +199,7 @@ class PickCourseViewTest(TestCase):
             'student_id': self.test_student.id,
             'course_id': self.test_course.id,
         }
+        request.user = User.objects.get(manager=self.test_manager)
         response = pick_course(request)
 
         self.assertEqual(self.test_course.student.count(), 1)
