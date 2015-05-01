@@ -63,3 +63,9 @@ CLOSED: [2015-05-01 Fri 10:12]
 ** TODO Return an error when adding course with no teacher information
 <2015-05-01 Fri 10:12>
 Link: file:~/GitHub/course_pick/courses/tests.py::self.assertEqual(saved_course.teacher.count(),%201)
+** TODO Add a course need course time info
+<2015-05-01 Fri 11:13>
+Link: file:~/GitHub/course_pick/courses/tests.py::courses%20%3D%20Course.objects.all()
+** TODO Add a course need exam info
+<2015-05-01 Fri 11:16>
+Link: file:~/GitHub/course_pick/courses/tests.py::Course.objects.get(id%3D'c0001')
