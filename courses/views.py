@@ -16,9 +16,11 @@ def add_course(request):
             max_student_number = request.POST['max_student_number'],
             remark             = request.POST['remark'],
         )
+
         teacher_list = request.POST['teacher']
         for teacher in teacher_list:
             new_course.teacher.add(teacher)
+
         time_list = request.POST['time']
         for time_info in time_list:
             new_time = CourseTime.objects.create(
@@ -27,6 +29,14 @@ def add_course(request):
                 begin=time_info['begin'],
                 end=time_info['end'],
             )
+
+        exam = request.POST['exam']
+        new_exam = Exam.objects.create(
+            course=new_course,
+            method=exam['method'],
+            date=exam['date'],
+            time=exam['time'],
+        )
         return redirect('/')
 
 def delete_course(request):
