@@ -54,3 +54,32 @@ CLOSED: [2015-04-30 Thu 17:46]
 - State "DONE"       from "TODO"       [2015-04-30 Thu 17:46]
 :END:
  Link: file:~/GitHub/course_pick/accounts/tests.py
+** DONE Add course with teacher's information      <2015-05-01 Fri 09:26>
+CLOSED: [2015-05-01 Fri 10:12]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2015-05-01 Fri 10:12]
+:END:
+ Link: file:~/GitHub/course_pick/courses/tests.py::self.assertEqual(new_course.name,%20'test')
+** TODO Return an error when adding course with no teacher information
+<2015-05-01 Fri 10:12>
+Link: file:~/GitHub/course_pick/courses/tests.py::self.assertEqual(saved_course.teacher.count(),%201)
+** TODO Add a course need course time info
+<2015-05-01 Fri 11:13>
+Link: file:~/GitHub/course_pick/courses/tests.py::courses%20%3D%20Course.objects.all()
+** TODO Add a course need exam info
+<2015-05-01 Fri 11:16>
+Link: file:~/GitHub/course_pick/courses/tests.py::Course.objects.get(id%3D'c0001')
+** TODO A student can pick course for himself
+<2015-05-01 Fri 10:31>
+Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
+** TODO A teacher can pick his course for student
+<2015-05-01 Fri 10:46>
+Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
+** TODO  A manager can pick any course for any student
+<2015-05-01 Fri 10:48>
+Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
+** TODO Course time conflict
+<2015-05-01 Fri 11:57>
+Link: file:~/GitHub/course_pick/courses/tests.py::class%20PickCourseViewTest(TestCase):
+** TODO  Return error message when time conflict      <2015-05-01 Fri 13:59>
+ Link: file:~/GitHub/course_pick/courses/views.py::return%20redirect('/')
