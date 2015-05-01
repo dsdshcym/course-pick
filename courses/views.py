@@ -19,6 +19,14 @@ def add_course(request):
         teacher_list = request.POST['teacher']
         for teacher in teacher_list:
             new_course.teacher.add(teacher)
+        time_list = request.POST['time']
+        for time_info in time_list:
+            new_time = CourseTime.objects.create(
+                course=new_course,
+                weekday=time_info['weekday'],
+                begin=time_info['begin'],
+                end=time_info['end'],
+            )
         return redirect('/')
 
 def delete_course(request):
