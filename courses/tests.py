@@ -193,8 +193,7 @@ class PickCourseViewTest(TestCase):
             )
 
     def test_a_student_can_pick_a_course(self):
-        client = Client()
-        client.login(username=self.test_student.id, password='')
+        self.client.login(username=self.test_student.id, password='')
 
         request = HttpRequest()
         request.method = 'POST'
@@ -209,8 +208,7 @@ class PickCourseViewTest(TestCase):
         self.assertEqual(self.test_course.student.first(), self.test_student)
 
     def test_a_teacher_can_pick_his_course_for_a_student(self):
-        client = Client()
-        client.login(username=self.test_teacher.id, password='')
+        self.client.login(username=self.test_teacher.id, password='')
 
         request = HttpRequest()
         request.method = 'POST'
@@ -225,8 +223,7 @@ class PickCourseViewTest(TestCase):
         self.assertEqual(self.test_course.student.first(), self.test_student)
 
     def test_a_manager_can_pick_any_course_for_any_student(self):
-        client = Client()
-        client.login(username=self.test_manager.id, password='')
+        self.client.login(username=self.test_manager.id, password='')
 
         request = HttpRequest()
         request.method = 'POST'
@@ -259,11 +256,10 @@ class DropCourseViewTest(TestCase):
         student_id = self.first_test_student.id
         course_id = self.test_course.id
 
-        client = Client()
-        client.login(username=student_id, password='')
+        self.client.login(username=student_id, password='')
 
         self.assertEqual(self.test_course.student.count(), 1)
 
-        response = client.post('/courses/drop/', {'student_id': student_id, 'course_id': course_id})
+        response = self.client.post('/courses/drop/', {'student_id': student_id, 'course_id': course_id})
 
         self.assertEqual(self.test_course.student.count(), 0)
