@@ -1,6 +1,6 @@
 import datetime
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.core import exceptions
 from django.utils import timezone
@@ -254,3 +254,28 @@ class PickCourseViewTest(TestCase):
 
         self.assertEqual(self.test_course.student.count(), 1)
         self.assertEqual(self.test_course.student.first(), self.test_student)
+
+class DropCourseViewTest(TestCase):
+    def setUp(self):
+        self.first_test_student = Student.objects.create(
+            id='s0001',
+            name='test_student',
+            user=User.objects.create_user(username='s0001', password='')
+        )
+        self.test_course = Course.objects.create(
+            id='c0001',
+            name='test_course',
+            score=2.0,
+            max_student_number=50,
+        )
+        self.test_course.student.add(self.first_test_student)
+
+    def test_drop_course(self):
+        student_id = self.first_test_student.id
+        course_id = self.test_course.id
+
+        self.assertEqual(self.test_course.student.count(), 1)
+
+        response = client.post('/courses/drop/', {'student_id': student_id, 'course_id': course_id})
+
+        self.assertEqual(self.test_course.student.count(), 0)
