@@ -5,7 +5,7 @@ from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
 
-# @permission_required('courses.can_add_course')
+# @permission_required('courses.add_course')
 def add_course(request):
     if request.method == 'POST':
         new_course = Course.objects.create(
@@ -40,6 +40,7 @@ def add_course(request):
         )
         return redirect('/')
 
+@permission_required('courses.delete_course')
 def delete_course(request):
     if request.method == 'POST':
         id = request.POST['id']
