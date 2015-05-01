@@ -6,10 +6,10 @@ from accounts.models import Teacher
 from accounts.views import register
 from accounts.tests import create_register_request
 
-from courses.models import Course
+from courses.models import Course, CourseTime
 from courses.views import add_course, delete_course
 
-def add_a_new_course_through_request(id, name, college, classroom, score, max_student_number, remark, teacher=None):
+def add_a_new_course_through_request(id, name, college, classroom, score, max_student_number, remark, teacher=None, time=None):
     request = HttpRequest()
     request.method = 'POST'
     request.POST = {
@@ -21,6 +21,7 @@ def add_a_new_course_through_request(id, name, college, classroom, score, max_st
         'max_student_number' : max_student_number,
         'remark'             : remark,
         'teacher'            : teacher,
+        'time'               : time,
     }
     response = add_course(request)
     return response
@@ -65,6 +66,14 @@ class AddCourseViewTest(TestCase):
 
         teacher_list = [self.teacher]
 
+        self.time = {
+            'weekday': 'Mon',
+            'begin': 1,
+            'end': 4,
+        }
+
+        time_list = [self.time]
+
         self.response = add_a_new_course_through_request(
             'c0001',
             'test',
@@ -74,6 +83,7 @@ class AddCourseViewTest(TestCase):
             20,
             '',
             teacher_list,
+            time_list,
         )
 
     def test_manager_can_add_a_new_course(self):
@@ -86,6 +96,12 @@ class AddCourseViewTest(TestCase):
         saved_course = Course.objects.get(id='c0001')
         self.assertEqual(saved_course.teacher.count(), 1)
         self.assertEqual(saved_course.teacher.first(), self.teacher)
+
+    def test_add_a_new_course_need_time_info(self):
+        saved_course = Course.objects.get(id='c0001')
+        course_time = CourseTime.objects.all()
+        self.assertEqual(course_time.count(), 1)
+        self.assertEqual(course_time.first().weekday, self.time['weekday'])
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):
