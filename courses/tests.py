@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 from accounts.models import Student, Teacher, Manager
-from accounts.views import register
+from accounts.views import register, MANAGER_PERMISSION
 from accounts.tests import create_register_request
 
 from courses.models import Course, CourseTime, Exam
@@ -152,17 +152,22 @@ class DeleteCourseViewTest(TestCase):
         )
         self.new_course.save()
 
-    def test_manager_can_delete_a_exists_course(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST = {
-            'id': self.new_course.id,
-        }
+        manager_user = User.objects.create_user(username='m0001', password='')
 
-        response = delete_course(request)
+        self.test_manager = Manager.objects.create(
+            id='m0001',
+            name='test_manager',
+            user=manager_user,
+            )
+
+        manager_user.user_permissions = MANAGER_PERMISSION
+
+    def test_manager_can_delete_a_exists_course(self):
+        self.client.login(username=self.test_manager.id, password='')
+        self.client.post('/courses/delete/', {'id': self.new_course.id})
 
         with self.assertRaises(exceptions.ObjectDoesNotExist):
-            Course.objects.get(id='c0001')
+            Course.objects.get(id=self.new_course.id)
 
 class PickCourseViewTest(TestCase):
     def setUp(self):
