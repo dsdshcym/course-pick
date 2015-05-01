@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.http import HttpRequest
+from django.conf import settings
 
 from django.contrib.auth.models import User, Permission
 
@@ -169,3 +170,24 @@ class ManagerRegisterTest(TestCase):
         self.assertTrue(saved_user.has_perm('courses.add_course'))
         self.assertTrue(saved_user.has_perm('courses.change_course'))
         self.assertTrue(saved_user.has_perm('courses.delete_course'))
+
+class StudentLoginViewTest(TestCase):
+    test_student_id = 's001'
+    test_student_name = 'test_student'
+
+    test_password = '1234'
+
+    def setUp(self):
+        self.test_student = Student.objects.create(
+            id=self.test_student_id,
+            name=self.test_student_name,
+            user=User.objects.create_user(username=self.test_student_id, password=self.test_password)
+        )
+
+    def test_student_login(self):
+        response = self.client.post('/accounts/login/',
+                                    {
+                                        'username': self.test_student_id,
+                                        'password': self.test_password,
+                                    })
+        self.assertIn(settings.LOGIN_REDIRECT_URL, response.url)
