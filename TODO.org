@@ -72,3 +72,6 @@ Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
 ** TODO  A manager can pick any course for any student
 <2015-05-01 Fri 10:48>
 Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
+** TODO Course time conflict
+<2015-05-01 Fri 11:57>
+Link: file:~/GitHub/course_pick/courses/tests.py::class%20PickCourseViewTest(TestCase):
