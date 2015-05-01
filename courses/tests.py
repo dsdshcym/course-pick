@@ -270,9 +270,12 @@ class DropCourseViewTest(TestCase):
         )
         self.test_course.student.add(self.first_test_student)
 
-    def test_drop_course(self):
+    def test_a_student_can_drop_a_picked_course(self):
         student_id = self.first_test_student.id
         course_id = self.test_course.id
+
+        client = Client()
+        client.login(username=student_id, password='')
 
         self.assertEqual(self.test_course.student.count(), 1)
 
