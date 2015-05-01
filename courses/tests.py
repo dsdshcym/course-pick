@@ -44,10 +44,9 @@ class CourseModelTest(TestCase):
         self.assertEqual(second_saved_item.name, 'second_test_course')
 
 class AddCourseViewTest(TestCase):
-
-    def test_manager_can_add_a_new_course(self):
-        response = add_a_new_course_through_request(
-            '0001',
+    def setUp(self):
+        self.response = add_a_new_course_through_request(
+            'c0001',
             'test',
             'CS',
             'Z2101',
@@ -55,8 +54,11 @@ class AddCourseViewTest(TestCase):
             20,
             '',
         )
-        self.assertEqual(Course.objects.count(), 1)
-        new_course = Course.objects.first()
+
+    def test_manager_can_add_a_new_course(self):
+        courses = Course.objects.all()
+        self.assertEqual(courses.count(), 1)
+        new_course = courses.first()
         self.assertEqual(new_course.name, 'test')
 
 class DeleteCourseViewTest(TestCase):
