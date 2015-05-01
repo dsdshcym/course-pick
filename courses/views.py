@@ -56,3 +56,12 @@ def pick_course(request):
         course = Course.objects.get(id=course_id)
         course.student.add(student)
         return redirect('/')
+
+def drop_course(request):
+    if request.method == 'POST':
+        student_id = request.POST['student_id']
+        course_id = request.POST['course_id']
+        student = Student.objects.get(id=student_id)
+        course = Course.objects.get(id=course_id)
+        course.student.remove(student)
+        return redirect('/')
