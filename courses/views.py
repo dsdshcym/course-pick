@@ -23,3 +23,6 @@ def delete_course(request):
         course = Course.objects.get(id=id)
         course.delete()
         return redirect('/')
+
+def pick_course(request):
+    pass

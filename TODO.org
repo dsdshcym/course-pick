@@ -54,3 +54,6 @@ CLOSED: [2015-04-30 Thu 17:46]
 - State "DONE"       from "TODO"       [2015-04-30 Thu 17:46]
 :END:
  Link: file:~/GitHub/course_pick/accounts/tests.py
+** TODO A student can pick course for himself
+<2015-05-01 Fri 10:31>
+Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_

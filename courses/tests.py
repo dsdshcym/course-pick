@@ -1,9 +1,13 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.core import exceptions
 
+from accounts.models import Student
+from accounts.views import register
+from accounts.tests import create_register_request
+
 from courses.models import Course
-from courses.views import add_course, delete_course
+from courses.views import add_course, delete_course, pick_course
 
 def add_a_new_course_through_request(id, name, college, classroom, score, max_student_number, remark):
     request = HttpRequest()
@@ -82,3 +86,42 @@ class DeleteCourseViewTest(TestCase):
 
         with self.assertRaises(exceptions.ObjectDoesNotExist):
             Course.objects.get(id='c0001')
+
+class PickCourseViewTest(TestCase):
+    def setUp(self):
+        self.add_course_response = add_a_new_course_through_request(
+            'c0001',
+            'test',
+            'CS',
+            'Z2101',
+            2.0,
+            20,
+            '',
+        )
+        self.test_course = Course.objects.get(id='c0001')
+
+        add_student_request = create_register_request(
+            id='s0001',
+            name='test_student',
+            password='',
+            type=Student.user_type
+        )
+
+        add_student_response = register(add_student_request)
+
+        self.test_student = Student.objects.get(id='s0001')
+
+    def test_a_student_can_pick_a_course(self):
+        client = Client()
+        client.login(username=self.test_student.id, password='')
+
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'student_id': self.test_student.id,
+            'course_id': self.test_course.id,
+        }
+        response = pick_course(request)
+
+        self.assertEqual(self.test_course.student.count(), 1)
+        self.assertEqual(self.test_course.student.first(), self.test_student)
