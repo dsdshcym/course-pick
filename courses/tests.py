@@ -1,15 +1,29 @@
+import datetime
+
 from django.test import TestCase
 from django.http import HttpRequest
 from django.core import exceptions
+from django.utils import timezone
 
 from accounts.models import Teacher
 from accounts.views import register
 from accounts.tests import create_register_request
 
-from courses.models import Course, CourseTime
+from courses.models import Course, CourseTime, Exam
 from courses.views import add_course, delete_course
 
-def add_a_new_course_through_request(id, name, college, classroom, score, max_student_number, remark, teacher=None, time=None):
+def add_a_new_course_through_request(
+        id,
+        name,
+        college,
+        classroom,
+        score,
+        max_student_number,
+        remark,
+        teacher=None,
+        time=None,
+        exam=None,
+):
     request = HttpRequest()
     request.method = 'POST'
     request.POST = {
@@ -22,6 +36,7 @@ def add_a_new_course_through_request(id, name, college, classroom, score, max_st
         'remark'             : remark,
         'teacher'            : teacher,
         'time'               : time,
+        'exam'               : exam,
     }
     response = add_course(request)
     return response
@@ -74,6 +89,12 @@ class AddCourseViewTest(TestCase):
 
         time_list = [self.time]
 
+        self.exam = {
+            'method': Exam.KJ,
+            'date': timezone.now().date(),
+            'time': timezone.now().time(),
+        }
+
         self.response = add_a_new_course_through_request(
             'c0001',
             'test',
@@ -84,6 +105,7 @@ class AddCourseViewTest(TestCase):
             '',
             teacher_list,
             time_list,
+            self.exam,
         )
 
     def test_manager_can_add_a_new_course(self):
@@ -105,6 +127,15 @@ class AddCourseViewTest(TestCase):
         self.assertEqual(course_time.first().weekday, self.time['weekday'])
         self.assertEqual(course_time.first().begin, self.time['begin'])
         self.assertEqual(course_time.first().end, self.time['end'])
+
+    def test_add_a_new_course_need_exam_info(self):
+        saved_course = Course.objects.get(id='c0001')
+        exam = Exam.objects.all()
+        self.assertEqual(exam.count(), 1)
+        self.assertEqual(exam.first().course, saved_course)
+        self.assertEqual(exam.first().method, self.exam['method'])
+        self.assertEqual(exam.first().date, self.exam['date'])
+        self.assertEqual(exam.first().time, self.exam['time'])
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):
