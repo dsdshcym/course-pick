@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, Permission
 from accounts.models import Student, Teacher, Manager
 from accounts.views import register
 
-def create_register_request(id, name, password, type):
+def create_register_request(id, name, password, type, title=''):
     request = HttpRequest()
     request.method = 'POST'
     request.POST = {
@@ -14,6 +14,7 @@ def create_register_request(id, name, password, type):
         'name'     : name,
         'password' : password,
         'type'     : type,
+        'title'    : title,
     }
     return request
 
