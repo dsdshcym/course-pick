@@ -101,7 +101,10 @@ class AddCourseViewTest(TestCase):
         saved_course = Course.objects.get(id='c0001')
         course_time = CourseTime.objects.all()
         self.assertEqual(course_time.count(), 1)
+        self.assertEqual(course_time.first().course, saved_course)
         self.assertEqual(course_time.first().weekday, self.time['weekday'])
+        self.assertEqual(course_time.first().begin, self.time['begin'])
+        self.assertEqual(course_time.first().end, self.time['end'])
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):
