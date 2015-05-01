@@ -184,3 +184,18 @@ class PickCourseViewTest(TestCase):
 
         self.assertEqual(self.test_course.student.count(), 1)
         self.assertEqual(self.test_course.student.first(), self.test_student)
+
+    def test_a_manager_can_pick_any_course_for_any_student(self):
+        client = Client()
+        client.login(username=self.test_manager.id, password='')
+
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'student_id': self.test_student.id,
+            'course_id': self.test_course.id,
+        }
+        response = pick_course(request)
+
+        self.assertEqual(self.test_course.student.count(), 1)
+        self.assertEqual(self.test_course.student.first(), self.test_student)
