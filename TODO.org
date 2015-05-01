@@ -66,3 +66,9 @@ Link: file:~/GitHub/course_pick/courses/tests.py::self.assertEqual(saved_course.
 ** TODO A student can pick course for himself
 <2015-05-01 Fri 10:31>
 Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
+** TODO A teacher can pick his course for student
+<2015-05-01 Fri 10:46>
+Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
+** TODO  A manager can pick any course for any student
+<2015-05-01 Fri 10:48>
+Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_

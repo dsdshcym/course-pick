@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.core import exceptions
 
-from accounts.models import Student, Teacher
+from accounts.models import Student, Teacher, Manager
 from accounts.views import register
 from accounts.tests import create_register_request
 
@@ -114,6 +114,17 @@ class DeleteCourseViewTest(TestCase):
 
 class PickCourseViewTest(TestCase):
     def setUp(self):
+        add_teacher_request = create_register_request(
+            id='t0001',
+            name='test_teacher',
+            password='',
+            type=Teacher.user_type
+        )
+        add_teacher_response = register(add_teacher_request)
+        self.test_teacher = Teacher.objects.get(id='t0001')
+
+        teacher_list = [self.test_teacher]
+
         self.add_course_response = add_a_new_course_through_request(
             'c0001',
             'test',
@@ -122,6 +133,7 @@ class PickCourseViewTest(TestCase):
             2.0,
             20,
             '',
+            teacher_list,
         )
         self.test_course = Course.objects.get(id='c0001')
 
@@ -131,14 +143,36 @@ class PickCourseViewTest(TestCase):
             password='',
             type=Student.user_type
         )
-
         add_student_response = register(add_student_request)
-
         self.test_student = Student.objects.get(id='s0001')
+
+        add_manager_request = create_register_request(
+            id='m0001',
+            name='test_manager',
+            password='',
+            type=Manager.user_type
+        )
+        add_manager_response = register(add_manager_request)
+        self.test_manager = Manager.objects.get(id='m0001')
 
     def test_a_student_can_pick_a_course(self):
         client = Client()
         client.login(username=self.test_student.id, password='')
+
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'student_id': self.test_student.id,
+            'course_id': self.test_course.id,
+        }
+        response = pick_course(request)
+
+        self.assertEqual(self.test_course.student.count(), 1)
+        self.assertEqual(self.test_course.student.first(), self.test_student)
+
+    def test_a_teacher_can_pick_his_course_for_a_student(self):
+        client = Client()
+        client.login(username=self.test_teacher.id, password='')
 
         request = HttpRequest()
         request.method = 'POST'
