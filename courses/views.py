@@ -54,6 +54,12 @@ def pick_course(request):
         course_id = request.POST['course_id']
         student = Student.objects.get(id=student_id)
         course = Course.objects.get(id=course_id)
+        picked_courses = student.course_set.all()
+        for picked_course in picked_courses:
+            for picked_course_time in picked_course.coursetime_set.all():
+                for course_time in course.coursetime_set.all():
+                    if (course_time.weekday == picked_course_time.weekday) and (course_time.end >= picked_course_time.begin) and (picked_course_time.end >= course_time.begin):
+                        return redirect('/')
         course.student.add(student)
         return redirect('/')
 

@@ -81,3 +81,5 @@ Link: file:~/GitHub/course_pick/courses/tests.py::def%20test_
 ** TODO Course time conflict
 <2015-05-01 Fri 11:57>
 Link: file:~/GitHub/course_pick/courses/tests.py::class%20PickCourseViewTest(TestCase):
+** TODO  Return error message when time conflict      <2015-05-01 Fri 13:59>
+ Link: file:~/GitHub/course_pick/courses/views.py::return%20redirect('/')
