@@ -2,10 +2,14 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.core import exceptions
 
+from accounts.models import Teacher
+from accounts.views import register
+from accounts.tests import create_register_request
+
 from courses.models import Course
 from courses.views import add_course, delete_course
 
-def add_a_new_course_through_request(id, name, college, classroom, score, max_student_number, remark):
+def add_a_new_course_through_request(id, name, college, classroom, score, max_student_number, remark, teacher=None):
     request = HttpRequest()
     request.method = 'POST'
     request.POST = {
@@ -16,6 +20,7 @@ def add_a_new_course_through_request(id, name, college, classroom, score, max_st
         'score'              : score,
         'max_student_number' : max_student_number,
         'remark'             : remark,
+        'teacher'            : teacher,
     }
     response = add_course(request)
     return response
@@ -45,6 +50,21 @@ class CourseModelTest(TestCase):
 
 class AddCourseViewTest(TestCase):
     def setUp(self):
+        teacher_register_request = create_register_request(
+            id='t0001',
+            name='test_teacher',
+            type=Teacher.user_type,
+            password='',
+        )
+
+        teacher_register_request.POST['title'] = ''
+
+        teacher_register_response = register(teacher_register_request)
+
+        self.teacher = Teacher.objects.get(id='t0001')
+
+        teacher_list = [self.teacher]
+
         self.response = add_a_new_course_through_request(
             'c0001',
             'test',
@@ -53,6 +73,7 @@ class AddCourseViewTest(TestCase):
             2.0,
             20,
             '',
+            teacher_list,
         )
 
     def test_manager_can_add_a_new_course(self):
@@ -60,6 +81,11 @@ class AddCourseViewTest(TestCase):
         self.assertEqual(courses.count(), 1)
         new_course = courses.first()
         self.assertEqual(new_course.name, 'test')
+
+    def test_add_a_new_course_need_teacher_info(self):
+        saved_course = Course.objects.get(id='c0001')
+        self.assertEqual(saved_course.teacher.count(), 1)
+        self.assertEqual(saved_course.teacher.first(), self.teacher)
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):

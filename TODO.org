@@ -54,3 +54,12 @@ CLOSED: [2015-04-30 Thu 17:46]
 - State "DONE"       from "TODO"       [2015-04-30 Thu 17:46]
 :END:
  Link: file:~/GitHub/course_pick/accounts/tests.py
+** DONE Add course with teacher's information      <2015-05-01 Fri 09:26>
+CLOSED: [2015-05-01 Fri 10:12]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2015-05-01 Fri 10:12]
+:END:
+ Link: file:~/GitHub/course_pick/courses/tests.py::self.assertEqual(new_course.name,%20'test')
+** TODO Return an error when adding course with no teacher information
+<2015-05-01 Fri 10:12>
+Link: file:~/GitHub/course_pick/courses/tests.py::self.assertEqual(saved_course.teacher.count(),%201)
