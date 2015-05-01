@@ -180,6 +180,27 @@ class PickCourseViewTest(TestCase):
         )
         self.test_course.teacher.add(self.test_teacher)
 
+        self.test_course_time = CourseTime.objects.create(
+            course=self.test_course,
+            weekday='Mon',
+            begin=1,
+            end=14,
+        )
+
+        self.another_test_course = Course.objects.create(
+            id='c0002',
+            name='test_another',
+            score=2.0,
+            max_student_number=50,
+        )
+
+        self.another_test_course_time = CourseTime.objects.create(
+            course=self.another_test_course,
+            weekday='Mon',
+            begin=3,
+            end=13,
+        )
+
         self.test_student = Student.objects.create(
             id='s0001',
             name='test_student',
@@ -236,6 +257,23 @@ class PickCourseViewTest(TestCase):
 
         self.assertEqual(self.test_course.student.count(), 1)
         self.assertEqual(self.test_course.student.first(), self.test_student)
+
+    def test_pick_course_solve_time_conflict(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'student_id': self.test_student.id,
+            'course_id': self.test_course.id,
+        }
+        request.user = User.objects.get(student=self.test_student)
+        first_response = pick_course(request)
+
+        self.assertEqual(self.test_student.course_set.count(), 1)
+
+        request.POST['course_id'] = self.another_test_course.id
+        second_response = pick_course(request)
+
+        self.assertEqual(self.test_student.course_set.count(), 1)
 
 class DropCourseViewTest(TestCase):
     def setUp(self):
