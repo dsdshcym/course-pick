@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
 
+from accounts.models import Student
+
 from courses.models import Course, Exam, CourseTime
 
 # @permission_required('courses.can_add_course')
@@ -25,4 +27,10 @@ def delete_course(request):
         return redirect('/')
 
 def pick_course(request):
-    pass
+    if request.method == 'POST':
+        student_id = request.POST['student_id']
+        course_id = request.POST['course_id']
+        student = Student.objects.get(id=student_id)
+        course = Course.objects.get(id=course_id)
+        course.student.add(student)
+        return redirect('/')
