@@ -22,8 +22,8 @@ def add_a_new_course_through_request(
         score,
         max_student_number,
         remark,
-        teacher=None,
-        time=None,
+        teacher=[],
+        time=[],
         exam=None,
 ):
     request = HttpRequest()
@@ -166,46 +166,31 @@ class DeleteCourseViewTest(TestCase):
 
 class PickCourseViewTest(TestCase):
     def setUp(self):
-        add_teacher_request = create_register_request(
+        self.test_teacher = Teacher.objects.create(
             id='t0001',
             name='test_teacher',
-            password='',
-            type=Teacher.user_type
+            user=User.objects.create(username='t0001',password=''),
         )
-        add_teacher_response = register(add_teacher_request)
-        self.test_teacher = Teacher.objects.get(id='t0001')
 
-        teacher_list = [self.test_teacher]
-
-        self.add_course_response = add_a_new_course_through_request(
-            'c0001',
-            'test',
-            'CS',
-            'Z2101',
-            2.0,
-            20,
-            '',
-            teacher_list,
+        self.test_course = Course.objects.create(
+            id='c0001',
+            name='test',
+            score=2.0,
+            max_student_number=50,
         )
-        self.test_course = Course.objects.get(id='c0001')
+        self.test_course.teacher.add(self.test_teacher)
 
-        add_student_request = create_register_request(
+        self.test_student = Student.objects.create(
             id='s0001',
             name='test_student',
-            password='',
-            type=Student.user_type
-        )
-        add_student_response = register(add_student_request)
-        self.test_student = Student.objects.get(id='s0001')
+            user=User.objects.create(username='s0001', password=''),
+            )
 
-        add_manager_request = create_register_request(
+        self.test_manager = Manager.objects.create(
             id='m0001',
             name='test_manager',
-            password='',
-            type=Manager.user_type
-        )
-        add_manager_response = register(add_manager_request)
-        self.test_manager = Manager.objects.get(id='m0001')
+            user=User.objects.create(username='m0001', password=''),
+            )
 
     def test_a_student_can_pick_a_course(self):
         client = Client()
