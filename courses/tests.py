@@ -61,7 +61,7 @@ class AddCourseViewTest(TestCase):
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):
-        new_course = Course.objects.create(
+        self.new_course = Course(
             id='c0001',
             name='test_course',
             college='CS',
@@ -70,12 +70,13 @@ class DeleteCourseViewTest(TestCase):
             max_student_number=50,
             remark='',
         )
+        self.new_course.save()
 
     def test_manager_can_delete_a_exists_course(self):
         request = HttpRequest()
         request.method = 'POST'
         request.POST = {
-            'id': 'c0001',
+            'id': self.new_course.id,
         }
 
         response = delete_course(request)
