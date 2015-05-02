@@ -2,28 +2,14 @@
 {% load staticfiles %}
 <html lang="zh-cn">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="{% static 'javascript/less-1.7.3.min.js' %}"></script>
         <script src="{% static 'javascript/jquery-1.11.1.min.js' %}"></script>
         <script src="{% static 'javascript/semantic.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
-        <link rel="stylesheet/less" href="{% static 'css/style.less' %}">
         <title>{% block title %}{% endblock %} - 选课</title>
     </head>
 
     <body>
-    <div id="top-menu" class="ui inverted menu">
-        <a class="logo item" href="/" title="Logo">选课</a>
-        <div class="right menu">
-            {% if user.is_authenticated %}
-            {% else %}
-            <a class="item" href="{% url 'register' %}">注册</a>
-            <a class="item" href="{% url 'login' %}">登录</a>
-            {% endif %}
-        </div>
-    </div>
     {% block content %}
     {% endblock %}
     </body>
-
 </html>

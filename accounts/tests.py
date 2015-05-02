@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.conf import settings
@@ -6,6 +8,7 @@ from django.contrib.auth.models import User, Permission
 
 from accounts.models import Student, Teacher, Manager
 from accounts.views import register
+from accounts.forms import RegisterForm
 
 def create_register_request(id, name, password, type, title=''):
     request = HttpRequest()
@@ -171,6 +174,16 @@ class ManagerRegisterTest(TestCase):
         self.assertTrue(saved_user.has_perm('courses.add_course'))
         self.assertTrue(saved_user.has_perm('courses.change_course'))
         self.assertTrue(saved_user.has_perm('courses.delete_course'))
+
+class RegisterFormTest(TestCase):
+    def setUp(self):
+        self.test_form = RegisterForm({
+            'id': '123'
+        })
+
+    def test_fileds_errors(self):
+        # self.assertFieldOutput(self.test_form.password, {'', u'学号/工号不能为空'})
+        pass
 
 class StudentLoginViewTest(TestCase):
     test_student_id = 's001'

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}注册{% endblock %}
+
+{% block content %}
+<div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div>
+            <label>学号/工号</label>
+            {{ form.id }}
+            <div>
+                {{ form.id.errors }}
+            </div>
+        </div>
+        <div>
+            <label>姓名</label>
+            {{ form.name }}
+            <div>
+                {{ form.name.errors }}
+            </div>
+        </div>
+        <div>
+            <label>密码</label>
+            {{ form.password }}
+            <div>
+                {{ form.password.errors }}
+            </div>
+        </div>
+        <div>
+            <label>确认密码</label>
+            {{ form.confirm_password }}
+            <div>
+                {{ form.confirm_password.errors }}
+            </div>
+        </div>
+        <div>
+            <label>用户组</label>
+            {{ form.type }}
+        </div>
+        <div>
+            <label>职称</label>
+            {{ form.title }}
+        </div>
+        <input type="submit" value="注册" class="ui green button">
+    </form>
+</div>
+{% endblock %}
