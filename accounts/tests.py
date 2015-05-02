@@ -3,6 +3,7 @@
 from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.conf import settings
+from django.utils.importlib import import_module
 
 from django.contrib.auth.models import User, Permission
 
@@ -17,16 +18,20 @@ def create_register_request(id, name, password, type, title=''):
         'id'       : id,
         'name'     : name,
         'password' : password,
+        'confirm_password' : password,
         'type'     : type,
         'title'    : title,
     }
+    engine = import_module(settings.SESSION_ENGINE)
+    session_key = None
+    request.session = engine.SessionStore(session_key)
     return request
 
 class StudentRegisterTest(TestCase):
     test_student_id = 's001'
     test_student_name = 'test_student'
 
-    test_password = '1234'
+    test_password = 'password'
 
     def setUp(self):
         self.first_student_request = self.create_one_student_register_request()
@@ -76,7 +81,7 @@ class TeacherRegisterTest(TestCase):
     test_teacher_name = 'test_teacher'
     test_teacher_title = 'test_title'
 
-    test_password = '12345'
+    test_password = 'password'
 
     def setUp(self):
         self.first_teacher_request = self.create_one_teacher_register_request()
@@ -127,7 +132,7 @@ class ManagerRegisterTest(TestCase):
     test_manager_id = 'm001'
     test_manager_name = 'test_manager'
 
-    test_password = '123456'
+    test_password = 'password'
 
     def setUp(self):
         self.first_manager_request = self.create_one_manager_register_request()

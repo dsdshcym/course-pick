@@ -16,10 +16,10 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            id = form.cleaned_data['id']
-            name = form.cleaned_data['name']
-            password = form.cleaned_data['password']
-            type = form.cleaned_data['type']
+            id = request.POST['id']
+            name = request.POST['name']
+            password = request.POST['password']
+            type = request.POST['type']
             new_user = User.objects.create_user(username=id, password=password)
 
             if type == Student.user_type:
