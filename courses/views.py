@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
-from courses.forms import AddCourseForm, EditCourseForm, DeleteCourseForm, PickCourseForm
+from courses.forms import *
 
 @permission_required('courses.add_course')
 def add_course(request):
@@ -125,14 +125,24 @@ def pick_course(request):
     }
     return TemplateResponse(request, 'courses/pick_course.html', context)
 
+@login_required
 def drop_course(request):
     if request.method == 'POST':
-        student_id = request.POST['student_id']
-        course_id = request.POST['course_id']
-        student = Student.objects.get(id=student_id)
-        course = Course.objects.get(id=course_id)
-        course.student.remove(student)
-        return redirect('/')
+        form = DropCourseForm(request.POST)
+        if form.is_valid():
+            student_id = request.POST['student_id']
+            course_id = request.POST['course_id']
+            student = Student.objects.get(id=student_id)
+            course = Course.objects.get(id=course_id)
+            course.student.remove(student)
+            return redirect('/')
+    else:
+        form = DropCourseForm()
+
+    context = {
+        'form': form,
+    }
+    return TemplateResponse(request, 'courses/drop_course.html', context)
 
 def search_course(request, search_content):
     search_by_course = Course.objects.filter(name__icontains=search_content)
