@@ -13,6 +13,8 @@ TEACHER_PERMISSION = list(Permission.objects.filter(codename='change_course'))
 MANAGER_PERMISSION = list(Permission.objects.filter(codename__endswith='course')) + list(Permission.objects.filter(codename__endswith='exam')) + list(Permission.objects.filter(codename__endswith='coursetime'))
 
 def register(request):
+    if request.user.is_authenticated():
+        return redirect('/')
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -56,24 +58,7 @@ def login(request):
 
             if user:
                 auth_login(request, user)
-
-            try:
-                if user.student:
-                    return redirect('/courses/student/')
-            except:
-                pass
-
-            try:
-                if user.teacher:
-                    return redirect('/courses/teacher/')
-            except:
-                pass
-
-            try:
-                if user.manager:
-                    return redirect('/courses/manager/')
-            except:
-                pass
+                return redirect('/')
     else:
         form = LoginForm()
 
