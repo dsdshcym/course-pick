@@ -112,6 +112,45 @@ class AddCourseViewTest(TestCase):
         new_course = courses.first()
         self.assertEqual(new_course.name, TEST_COURSE_NAME)
 
+class EditCourseTest(TestCase):
+    def setUp(self):
+        self.course = Course.objects.create(
+            id                 = TEST_COURSE_ID,
+            name               = TEST_COURSE_NAME,
+            college            = TEST_COURSE_COLLEGE,
+            classroom          = TEST_COURSE_CLASSROOM,
+            score              = TEST_COURSE_SCORE,
+            max_student_number = TEST_COURSE_MAX_STUDENT_NUMBER,
+            remark             = TEST_COURSE_REMARK,
+        )
+
+        self.manager = Manager.objects.create(
+            id=TEST_MANAGER_ID,
+            name=TEST_MANAGER_NAME,
+            user=User.objects.create_user(username=TEST_MANAGER_ID, password=TEST_PASSWORD),
+        )
+
+        self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
+
+        self.manager.user.user_permissions = MANAGER_PERMISSION
+
+    def test_a_manager_can_edit_course_info(self):
+        test_course_new_name = 'new_test_course_name'
+        test_course_new_classroom = 'Z2301'
+        self.client.post('/courses/edit/' + TEST_COURSE_ID, {
+            'name': test_course_new_name,
+            'college': TEST_COURSE_COLLEGE,
+            'classroom': test_course_new_classroom,
+            'score': TEST_COURSE_SCORE,
+            'max_student_number': TEST_COURSE_MAX_STUDENT_NUMBER,
+            'remark': TEST_COURSE_REMARK,
+        })
+
+        new_course = Course.objects.get(id=TEST_COURSE_ID)
+
+        self.assertEqual(new_course.name, test_course_new_name)
+        self.assertEqual(new_course.classroom, test_course_new_classroom)
+
 class AddCourseExtraInfoTest(TestCase):
     def setUp(self):
         self.teacher = Teacher.objects.create(
