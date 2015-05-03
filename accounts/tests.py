@@ -190,11 +190,18 @@ class RegisterFormTest(TestCase):
         # self.assertFieldOutput(self.test_form.password, {'', u'学号/工号不能为空'})
         pass
 
-class StudentLoginViewTest(TestCase):
+class LoginViewTest(TestCase):
     test_student_id = 's001'
     test_student_name = 'test_student'
 
-    test_password = '1234'
+    test_teacher_id = 't001'
+    test_teacher_name = 'test_teacher'
+    test_teacher_title = 'test_title'
+
+    test_manager_id = 'm001'
+    test_manager_name = 'test_manager'
+
+    test_password = 'password'
 
     def setUp(self):
         self.test_student = Student.objects.create(
@@ -203,10 +210,39 @@ class StudentLoginViewTest(TestCase):
             user=User.objects.create_user(username=self.test_student_id, password=self.test_password)
         )
 
+        self.test_teacher = Teacher.objects.create(
+            id=self.test_teacher_id,
+            name=self.test_teacher_name,
+            user=User.objects.create_user(username=self.test_teacher_id, password=self.test_password),
+            title=self.test_teacher_title,
+        )
+
+        self.test_manager = Manager.objects.create(
+            id=self.test_manager_id,
+            name=self.test_manager_name,
+            user=User.objects.create_user(username=self.test_manager_id, password=self.test_password)
+        )
+
     def test_student_login(self):
         response = self.client.post('/accounts/login/',
                                     {
                                         'username': self.test_student_id,
                                         'password': self.test_password,
                                     })
-        self.assertIn(settings.LOGIN_REDIRECT_URL, response.url)
+        self.assertIn('/accounts/student/', response.url)
+
+    def test_teacher_login(self):
+        response = self.client.post('/accounts/login/',
+                                    {
+                                        'username': self.test_teacher_id,
+                                        'password': self.test_password,
+                                    })
+        self.assertIn('/accounts/teacher/', response.url)
+
+    def test_manager_login(self):
+        response = self.client.post('/accounts/login/',
+                                    {
+                                        'username': self.test_manager_id,
+                                        'password': self.test_password,
+                                    })
+        self.assertIn('/accounts/manager/', response.url)
