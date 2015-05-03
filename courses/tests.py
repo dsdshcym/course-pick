@@ -465,4 +465,4 @@ class StudentViewTest(TestCase):
 
     def test_student_view_returns_class_table_info(self):
         response = self.client.get('/courses/student/')
-        self.assertIn(self.test_course, response.context['class_table'][0])
+        self.assertIn(self.test_course_time, response.context['class_table'][0])
