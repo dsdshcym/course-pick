@@ -87,3 +87,32 @@ def search_course(request, search_content):
         'college_results': search_by_college,
     }
     return TemplateResponse(request, "courses/search_results.html", context)
+
+@login_required
+def student_view(request):
+    user = request.user
+    try:
+        student = user.student
+    except:
+        redirect('/')
+    WEEKDAY_ITER = {
+        'Mon': 0,
+        'Tue': 1,
+        'Wed': 2,
+        'Thu': 3,
+        'Fri': 4,
+        'Sat': 5,
+        'Sun': 6,
+    }
+    picked_courses = student.course_set.all()
+    class_table = [[None for j in range(8)] for i in range(15)]
+    for picked_course in picked_courses:
+        for course_time in picked_course.coursetime_set.all():
+            class_table[course_time.begin-1][WEEKDAY_ITER[course_time.weekday]] = picked_course
+
+    context = {
+        'courses': picked_courses,
+        'class_table': class_table,
+    }
+
+    return TemplateResponse(request, 'courses/student.html', context)
