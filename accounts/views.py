@@ -8,9 +8,9 @@ from django.template.response import TemplateResponse
 from accounts.models import Student, Teacher, Manager
 from accounts.forms import RegisterForm, LoginForm
 
-STUDENT_PERMISSION = Permission.objects.filter(codename='change_course')
-TEACHER_PERMISSION = Permission.objects.filter(codename='change_course')
-MANAGER_PERMISSION = Permission.objects.filter(codename__endswith='course')
+STUDENT_PERMISSION = list(Permission.objects.filter(codename='change_course'))
+TEACHER_PERMISSION = list(Permission.objects.filter(codename='change_course'))
+MANAGER_PERMISSION = list(Permission.objects.filter(codename__endswith='course')) + list(Permission.objects.filter(codename__endswith='exam')) + list(Permission.objects.filter(codename__endswith='coursetime'))
 
 def register(request):
     if request.method == 'POST':
