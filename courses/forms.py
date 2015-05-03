@@ -135,3 +135,64 @@ class AddCourseTeacherForm(forms.Form):
         if teacher in course.teacher.all():
             raise forms.ValidationError('该教师已负责这门课')
         return self.cleaned_data
+
+class AddCourseTimeForm(forms.Form):
+    course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+    WEEKDAY_CHOICES = (
+        ('Mon', '周一'),
+        ('Tue', '周二'),
+        ('Wed', '周三'),
+        ('Thu', '周四'),
+        ('Fri', '周五'),
+        ('Sat', '周六'),
+        ('Sun', '周日'),
+    )
+    COURSE_TIME_CHOICES = (
+        (1, '第 1 节'),
+        (2, '第 2 节'),
+        (3, '第 3 节'),
+        (4, '第 4 节'),
+        (5, '第 5 节'),
+        (6, '第 6 节'),
+        (7, '第 7 节'),
+        (8, '第 8 节'),
+        (9, '第 9 节'),
+        (10, '第 10 节'),
+        (11, '第 11 节'),
+        (12, '第 12 节'),
+        (13, '第 13 节'),
+        (14, '第 14 节'),
+    )
+    weekday = forms.ChoiceField(choices=WEEKDAY_CHOICES)
+    begin = forms.ChoiceField(choices=COURSE_TIME_CHOICES)
+    end = forms.ChoiceField(choices=COURSE_TIME_CHOICES)
+
+    def clean_course_id(self):
+        id = self.cleaned_data['course_id']
+        exists = Course.objects.filter(id=id).count()
+        if exists == 0:
+            raise forms.ValidationError('该课程不存在，请核对')
+        return id
+
+    def clean(self):
+        course_id = self.cleaned_data['course_id']
+        course = Course.objeds.get(id=course_id)
+
+        weekday = self.cleaned_data['weekday']
+        begin = self.cleaned_data['begin']
+        end = self.cleaned_data['end']
+
+        new_course_time = CourseTime(
+            course=course,
+            weekday=weekday,
+            begin=begin,
+            end=end,
+        )
+
+        old_course_times = course.coursetime_set.filter(weekday=weekday)
+
+        for old_course_time in course.course_times:
+            if check_time_conflict(new_course_time, old_course_time):
+                raise forms.ValidationError('该时间与已有时间冲突，请核对')
+
+        return self.cleaned_data
