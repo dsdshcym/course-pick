@@ -94,22 +94,7 @@ class AddCourseViewTest(TestCase):
             user=User.objects.create_user(username=TEST_MANAGER_ID, password=TEST_PASSWORD),
         )
 
-        self.teacher = Teacher.objects.create(
-            id=TEST_TEACHER_ID,
-            name=TEST_TEACHER_NAME,
-            user=User.objects.create_user(username=TEST_TEACHER_ID, password=TEST_PASSWORD),
-            title=TEST_TEACHER_TITLE,
-        )
-
-        teacher_list = [self.teacher]
-
-        self.time = {
-            'weekday': 'Mon',
-            'begin': 1,
-            'end': 4,
-        }
-
-        time_list = [self.time]
+        self.manager.user.user_permissions = MANAGER_PERMISSION
 
         self.exam = {
             'method': Exam.KJ,
@@ -117,19 +102,8 @@ class AddCourseViewTest(TestCase):
             'time': timezone.now().time(),
         }
 
-        # self.response = add_a_new_course_through_request(
-        #     'c0001',
-        #     'test',
-        #     'CS',
-        #     'Z2101',
-        #     2.0,
-        #     20,
-        #     '',
-        #     exam=self.exam,
-        # )
-
     def test_manager_can_add_a_new_course(self):
-        self.client.login(username=TEST_MANAGER_NAME, password=TEST_PASSWORD)
+        self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
         self.client.post('/courses/add/', {
             'id'                 : TEST_COURSE_ID,
             'name'               : TEST_COURSE_NAME,
@@ -158,14 +132,91 @@ class AddCourseViewTest(TestCase):
     #     self.assertEqual(course_time.first().begin, self.time['begin'])
     #     self.assertEqual(course_time.first().end, self.time['end'])
 
-    def test_add_a_new_course_need_exam_info(self):
-        saved_course = Course.objects.get(id='c0001')
-        exam = Exam.objects.all()
-        self.assertEqual(exam.count(), 1)
-        self.assertEqual(exam.first().course, saved_course)
-        self.assertEqual(exam.first().method, self.exam['method'])
-        self.assertEqual(exam.first().date, self.exam['date'])
-        self.assertEqual(exam.first().time, self.exam['time'])
+    # def test_add_a_new_course_need_exam_info(self):
+    #     saved_course = Course.objects.get(id='c0001')
+    #     exam = Exam.objects.all()
+    #     self.assertEqual(exam.count(), 1)
+    #     self.assertEqual(exam.first().course, saved_course)
+    #     self.assertEqual(exam.first().method, self.exam['method'])
+    #     self.assertEqual(exam.first().date, self.exam['date'])
+    #     self.assertEqual(exam.first().time, self.exam['time'])
+
+class AddCourseTeacherTest(TestCase):
+    def setUp(self):
+        self.teacher = Teacher.objects.create(
+            id=TEST_TEACHER_ID,
+            name=TEST_TEACHER_NAME,
+            user=User.objects.create_user(username=TEST_TEACHER_ID, password=TEST_PASSWORD),
+            title=TEST_TEACHER_TITLE,
+        )
+
+        self.course = Course.objects.create(
+            id                 = TEST_COURSE_ID,
+            name               = TEST_COURSE_NAME,
+            college            = TEST_COURSE_COLLEGE,
+            classroom          = TEST_COURSE_CLASSROOM,
+            score              = TEST_COURSE_SCORE,
+            max_student_number = TEST_COURSE_MAX_STUDENT_NUMBER,
+            remark             = TEST_COURSE_REMARK,
+        )
+
+        self.manager = Manager.objects.create(
+            id=TEST_MANAGER_ID,
+            name=TEST_MANAGER_NAME,
+            user=User.objects.create_user(username=TEST_MANAGER_ID, password=TEST_PASSWORD),
+        )
+
+        self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
+
+        self.manager.user.user_permissions = MANAGER_PERMISSION
+
+    def test_a_manager_can_add_a_course_teacher(self):
+        response = self.client.post('/courses/add/teacher/' + TEST_COURSE_ID, {
+            'id': TEST_TEACHER_ID,
+            'name': TEST_TEACHER_NAME,
+        })
+
+        added_teacher = self.course.teacher.all()
+
+        self.assertEqual(added_teacher.count(), 1)
+        self.assertEqual(added_teacher.first(), self.teacher)
+
+class AddCourseTimeTest(TestCase):
+    def setUp(self):
+        self.course = Course.objects.create(
+            id                 = TEST_COURSE_ID,
+            name               = TEST_COURSE_NAME,
+            college            = TEST_COURSE_COLLEGE,
+            classroom          = TEST_COURSE_CLASSROOM,
+            score              = TEST_COURSE_SCORE,
+            max_student_number = TEST_COURSE_MAX_STUDENT_NUMBER,
+            remark             = TEST_COURSE_REMARK,
+        )
+
+        self.manager = Manager.objects.create(
+            id=TEST_MANAGER_ID,
+            name=TEST_MANAGER_NAME,
+            user=User.objects.create_user(username=TEST_MANAGER_ID, password=TEST_PASSWORD),
+        )
+
+        self.coursetime = {
+            'weekday': 'Mon',
+            'begin': 1,
+            'end': 4,
+        }
+
+        self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
+
+        self.manager.user.user_permissions = MANAGER_PERMISSION
+
+    def test_a_manager_can_add_a_coursetime(self):
+        response = self.client.post('/courses/add/coursetime/' + TEST_COURSE_ID, self.coursetime)
+
+        added_coursetime = CourseTime.objects.all()
+
+        self.assertEqual(added_coursetime.count(), 1)
+        self.assertEqual(added_coursetime.first().course, self.course)
+        self.assertEqual(added_coursetime.first().weekday, self.coursetime['weekday'])
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):
