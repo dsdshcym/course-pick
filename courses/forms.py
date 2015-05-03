@@ -2,6 +2,8 @@
 
 from django import forms
 
+from accounts.models import Student
+
 from courses.models import Course
 
 class AddCourseForm(forms.Form):
@@ -38,4 +40,37 @@ class DeleteCourseForm(forms.Form):
         exists = Course.objects.filter(id=id, name=name).count()
         if exists == 0:
             raise forms.ValidationError('该课程不存在，请核对')
+        return self.cleaned_data
+
+class PickCourseForm(forms.Form):
+    student_id = forms.CharField(error_messages={'required': '学号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+    course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+
+    def clean_student_id(self):
+        id = self.cleaned_data['student_id']
+        exists = Student.objects.filter(id=id).count()
+        if exists == 0:
+            raise forms.ValidationError('该学生未注册，请核对')
+        return id
+
+    def clean_course_id(self):
+        id = self.cleaned_data['course_id']
+        exists = Course.objects.filter(id=id).count()
+        if exists == 0:
+            raise forms.ValidationError('该课程不存在，请核对')
+        return id
+
+    def clean(self):
+        student_id = self.cleaned_data['student_id']
+        course_id = self.cleaned_data['course_id']
+        student = Student.objects.get(id=student_id)
+        course = Course.objects.get(id=course_id)
+        if student in course.student.all():
+            raise forms.ValidationError('该学生已选了这门课')
+        picked_courses = student.course_set.all()
+        for picked_course in picked_courses:
+            for picked_course_time in picked_course.coursetime_set.all():
+                for course_time in course.coursetime_set.all():
+                    if (course_time.weekday == picked_course_time.weekday) and (course_time.end >= picked_course_time.begin) and (picked_course_time.end >= course_time.begin):
+                        raise forms.ValidationError('与已选课程时间冲突')
         return self.cleaned_data
