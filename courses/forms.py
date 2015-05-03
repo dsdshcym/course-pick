@@ -16,6 +16,6 @@ class AddCourseForm(forms.Form):
     def clean_id(self):
         id = self.cleaned_data['id']
         exists = Course.objects.filter(id=id).count()
-        if exists:
+        if exists > 0:
             raise forms.ValidationError('该课程已添加，请添加其他课程或选择修改课程')
         return id
