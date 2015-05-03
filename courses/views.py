@@ -44,7 +44,7 @@ def add_course_teacher(request, course_id):
         course.teacher.add(teacher)
         return redirect('/courses/add/coursetime/'+course_id)
 
-@permission_required('courses.change_course')
+@permission_required('courses.add_coursetime')
 def add_coursetime(request, course_id):
     if request.method == 'POST':
         course = Course.objects.get(id=course_id)
@@ -59,7 +59,7 @@ def add_coursetime(request, course_id):
         )
         return redirect('/courses/add/exam/'+course_id)
 
-@permission_required('courses.change_course')
+@permission_required('courses.add_exam')
 def add_exam(request, course_id):
     if request.method == 'POST':
         course = Course.objects.get(id=course_id)
