@@ -8,41 +8,32 @@ from django.template.response import TemplateResponse
 from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
+from courses.forms import AddCourseForm
 
 # @permission_required('courses.add_course')
 def add_course(request):
     if request.method == 'POST':
-        new_course = Course.objects.create(
-            id                 = request.POST['id'],
-            name               = request.POST['name'],
-            college            = request.POST['college'],
-            classroom          = request.POST['classroom'],
-            score              = request.POST['score'],
-            max_student_number = request.POST['max_student_number'],
-            remark             = request.POST['remark'],
-        )
-
-        teacher_list = request.POST['teacher']
-        for teacher in teacher_list:
-            new_course.teacher.add(teacher)
-
-        time_list = request.POST['time']
-        for time_info in time_list:
-            new_time = CourseTime.objects.create(
-                course=new_course,
-                weekday=time_info['weekday'],
-                begin=time_info['begin'],
-                end=time_info['end'],
+        form = AddCourseForm(request.POST)
+        # print form
+        if form.is_valid():
+            new_course = Course.objects.create(
+                id                 = request.POST['id'],
+                name               = request.POST['name'],
+                college            = request.POST['college'],
+                classroom          = request.POST['classroom'],
+                score              = request.POST['score'],
+                max_student_number = request.POST['max_student_number'],
+                remark             = request.POST['remark'],
             )
 
-        exam = request.POST['exam']
-        new_exam = Exam.objects.create(
-            course=new_course,
-            method=exam['method'],
-            date=exam['date'],
-            time=exam['time'],
-        )
-        return redirect('/')
+            # exam = request.POST['exam']
+            # new_exam = Exam.objects.create(
+            #     course=new_course,
+            #     method=exam['method'],
+            #     date=exam['date'],
+            #     time=exam['time'],
+            # )
+            return redirect('/')
 
 @permission_required('courses.delete_course')
 def delete_course(request):
