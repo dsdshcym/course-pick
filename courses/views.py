@@ -10,7 +10,7 @@ from accounts.models import Student, Teacher
 from courses.models import Course, Exam, CourseTime
 from courses.forms import AddCourseForm
 
-# @permission_required('courses.add_course')
+@permission_required('courses.add_course')
 def add_course(request):
     if request.method == 'POST':
         form = AddCourseForm(request.POST)
@@ -34,6 +34,30 @@ def add_course(request):
             #     time=exam['time'],
             # )
             return redirect('/')
+
+@permission_required('courses.change_course')
+def add_course_teacher(request, course_id):
+    if request.method == 'POST':
+        teacher_id = request.POST['id']
+        course = Course.objects.get(id=course_id)
+        teacher = Teacher.objects.get(id=teacher_id)
+        course.teacher.add(teacher)
+        return redirect('/courses/add/coursetime/'+course_id)
+
+@permission_required('courses.change_course')
+def add_coursetime(request, course_id):
+    if request.method == 'POST':
+        course = Course.objects.get(id=course_id)
+        weekday = request.POST['weekday']
+        begin = request.POST['begin']
+        end = request.POST['end']
+        coursetime = CourseTime.objects.create(
+            course=course,
+            weekday=weekday,
+            begin=begin,
+            end=end,
+        )
+        return redirect('/courses/add/exam/'+course_id)
 
 @permission_required('courses.delete_course')
 def delete_course(request):
