@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.models import User, Permission
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login as auth_login
 
 from django.template.response import TemplateResponse
 
 from accounts.models import Student, Teacher, Manager
-from accounts.forms import RegisterForm
+from accounts.forms import RegisterForm, LoginForm
 
 STUDENT_PERMISSION = Permission.objects.filter(codename='change_course')
 TEACHER_PERMISSION = Permission.objects.filter(codename='change_course')
@@ -36,7 +36,7 @@ def register(request):
                 new_user.user_permissions = MANAGER_PERMISSION
 
             user = authenticate(username=id, password=password)
-            login(request, user)
+            auth_login(request, user)
             return redirect('/')
     else:
         form = RegisterForm()
@@ -45,3 +45,39 @@ def register(request):
         'form': form
     }
     return TemplateResponse(request, "accounts/register.html", context)
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+
+            if user:
+                auth_login(request, user)
+
+            try:
+                if user.student:
+                    return redirect('/accounts/student/')
+            except:
+                pass
+
+            try:
+                if user.teacher:
+                    return redirect('/accounts/teacher/')
+            except:
+                pass
+
+            try:
+                if user.manager:
+                    return redirect('/accounts/manager/')
+            except:
+                pass
+    else:
+        form = LoginForm()
+
+    context = {
+        'form': form
+    }
+    return TemplateResponse(request, "accounts/login.html", context)
