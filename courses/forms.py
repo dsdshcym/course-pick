@@ -2,7 +2,7 @@
 
 from django import forms
 
-from accounts.models import Student
+from accounts.models import Student, Teacher
 
 from courses.models import Course
 
@@ -100,4 +100,31 @@ class DropCourseForm(forms.Form):
         course = Course.objects.get(id=course_id)
         if student not in course.student.all():
             raise forms.ValidationError('该学生未选这门课')
+        return self.cleaned_data
+
+class AddCourseTeacherForm(forms.Form):
+    teacher_id = forms.CharField(error_messages={'required': '教师工号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+    course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+
+    def clean_teacher_id(self):
+        id = self.cleaned_data['teacher_id']
+        exists = Teacher.objects.filter(id=id).count()
+        if exists == 0:
+            raise forms.ValidationError('该教师未注册，请核对')
+        return id
+
+    def clean_course_id(self):
+        id = self.cleaned_data['course_id']
+        exists = Course.objects.filter(id=id).count()
+        if exists == 0:
+            raise forms.ValidationError('该课程不存在，请核对')
+        return id
+
+    def clean(self):
+        teacher_id = self.cleaned_data['teacher_id']
+        course_id = self.cleaned_data['course_id']
+        teacher = Teacher.objects.get(id=teacher_id)
+        course = Course.objects.get(id=course_id)
+        if teacher in course.teacher.all():
+            raise forms.ValidationError('该教师已负责这门课')
         return self.cleaned_data
