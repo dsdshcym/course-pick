@@ -16,13 +16,13 @@ def add_course(request):
         form = AddCourseForm(request.POST)
         if form.is_valid():
             new_course = Course.objects.create(
-                id                 = request.POST['id'],
-                name               = request.POST['name'],
-                college            = request.POST['college'],
-                classroom          = request.POST['classroom'],
-                score              = request.POST['score'],
-                max_student_number = request.POST['max_student_number'],
-                remark             = request.POST['remark'],
+                id                 = form.cleaned_data['id'],
+                name               = form.cleaned_data['name'],
+                college            = form.cleaned_data['college'],
+                classroom          = form.cleaned_data['classroom'],
+                score              = form.cleaned_data['score'],
+                max_student_number = form.cleaned_data['max_student_number'],
+                remark             = form.cleaned_data['remark'],
             )
 
             return redirect('/')
@@ -41,12 +41,12 @@ def edit_course(request, course_id):
         if form.is_valid():
             course = Course.objects.filter(id=course_id)
             course.update(
-                name               = request.POST['name'],
-                college            = request.POST['college'],
-                classroom          = request.POST['classroom'],
-                score              = request.POST['score'],
-                max_student_number = request.POST['max_student_number'],
-                remark             = request.POST['remark'],
+                name               = form.cleaned_data['name'],
+                college            = form.cleaned_data['college'],
+                classroom          = form.cleaned_data['classroom'],
+                score              = form.cleaned_data['score'],
+                max_student_number = form.cleaned_data['max_student_number'],
+                remark             = form.cleaned_data['remark'],
             )
 
             return redirect('/')
