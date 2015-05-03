@@ -6,6 +6,13 @@ from accounts.models import Student, Teacher
 
 from courses.models import Course
 
+def check_time_conflict(course_time, old_course_time):
+    if (course_time.weekday == old_course_time.weekday)\
+        and (((course_time.end >= old_course_time.begin) and (old_course_time.end >= course_time.begin))\
+            or ((old_course_time.end >= course_time.begin) and (course_time.end >= old_course_time.begin))):
+        return True
+    return False
+
 class AddCourseForm(forms.Form):
     id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
     name = forms.CharField(error_messages={'required': '课程名不能为空', 'max_length': '最多为 40 个字符'}, max_length=40)
@@ -71,7 +78,7 @@ class PickCourseForm(forms.Form):
         for picked_course in picked_courses:
             for picked_course_time in picked_course.coursetime_set.all():
                 for course_time in course.coursetime_set.all():
-                    if (course_time.weekday == picked_course_time.weekday) and (course_time.end >= picked_course_time.begin) and (picked_course_time.end >= course_time.begin):
+                    if check_time_conflict(course_time, picked_course_time):
                         raise forms.ValidationError('与已选课程时间冲突')
         return self.cleaned_data
 
