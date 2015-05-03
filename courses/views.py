@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
-from courses.forms import AddCourseForm, EditCourseForm
+from courses.forms import AddCourseForm, EditCourseForm, DeleteCourseForm
 
 @permission_required('courses.add_course')
 def add_course(request):
@@ -93,10 +93,18 @@ def add_exam(request, course_id):
 @permission_required('courses.delete_course')
 def delete_course(request):
     if request.method == 'POST':
-        id = request.POST['id']
-        course = Course.objects.get(id=id)
-        course.delete()
-        return redirect('/')
+        form = DeleteCourseForm(request.POST)
+        if form.is_valid():
+            id = form.cleaned_data['id']
+            course = Course.objects.get(id=id)
+            course.delete()
+    else:
+        form = DeleteCourseForm()
+
+    context = {
+        'form': form,
+    }
+    return TemplateResponse(request, 'courses/delete.html', context)
 
 @login_required
 def pick_course(request):
