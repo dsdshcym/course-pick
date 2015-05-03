@@ -59,6 +59,21 @@ def add_coursetime(request, course_id):
         )
         return redirect('/courses/add/exam/'+course_id)
 
+@permission_required('courses.change_course')
+def add_exam(request, course_id):
+    if request.method == 'POST':
+        course = Course.objects.get(id=course_id)
+        method = request.POST['method']
+        date = request.POST['date']
+        time = request.POST['time']
+        exam = Exam.objects.create(
+            course=course,
+            method=method,
+            date=date,
+            time=time,
+        )
+        return redirect('/courses/manager/')
+
 @permission_required('courses.delete_course')
 def delete_course(request):
     if request.method == 'POST':
