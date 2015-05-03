@@ -246,7 +246,7 @@ class DeleteCourseViewTest(TestCase):
 
     def test_manager_can_delete_a_exists_course(self):
         self.client.login(username=self.test_manager.id, password='')
-        self.client.post('/courses/delete/', {'id': self.new_course.id})
+        self.client.post('/courses/delete/', {'id': self.new_course.id, 'name': self.new_course.name})
 
         with self.assertRaises(exceptions.ObjectDoesNotExist):
             Course.objects.get(id=self.new_course.id)
