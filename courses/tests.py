@@ -112,29 +112,6 @@ class AddCourseViewTest(TestCase):
         new_course = courses.first()
         self.assertEqual(new_course.name, TEST_COURSE_NAME)
 
-    # def test_add_a_new_course_need_teacher_info(self):
-    #     saved_course = Course.objects.get(id='c0001')
-    #     self.assertEqual(saved_course.teacher.count(), 1)
-    #     self.assertEqual(saved_course.teacher.first(), self.teacher)
-
-    # def test_add_a_new_course_need_time_info(self):
-    #     saved_course = Course.objects.get(id='c0001')
-    #     course_time = CourseTime.objects.all()
-    #     self.assertEqual(course_time.count(), 1)
-    #     self.assertEqual(course_time.first().course, saved_course)
-    #     self.assertEqual(course_time.first().weekday, self.time['weekday'])
-    #     self.assertEqual(course_time.first().begin, self.time['begin'])
-    #     self.assertEqual(course_time.first().end, self.time['end'])
-
-    # def test_add_a_new_course_need_exam_info(self):
-    #     saved_course = Course.objects.get(id='c0001')
-    #     exam = Exam.objects.all()
-    #     self.assertEqual(exam.count(), 1)
-    #     self.assertEqual(exam.first().course, saved_course)
-    #     self.assertEqual(exam.first().method, self.exam['method'])
-    #     self.assertEqual(exam.first().date, self.exam['date'])
-    #     self.assertEqual(exam.first().time, self.exam['time'])
-
 class AddCourseExtraInfoTest(TestCase):
     def setUp(self):
         self.teacher = Teacher.objects.create(
