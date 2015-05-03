@@ -181,6 +181,8 @@ def student_view(request):
     for picked_course in picked_courses:
         for course_time in picked_course.coursetime_set.all():
             class_table[course_time.begin-1][WEEKDAY_ITER[course_time.weekday]] = course_time
+            for i in range(course_time.begin, course_time.end):
+                class_table[i][WEEKDAY_ITER[course_time.weekday]] = None
 
     context = {
         'courses': picked_courses,

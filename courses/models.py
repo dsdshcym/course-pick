@@ -77,3 +77,6 @@ class CourseTime(models.Model):
 
     def __unicode__(self):
         return self.course.__unicode__() + '_' + self.get_weekday_display()
+
+    def get_span(self):
+        return self.end - self.begin + 1

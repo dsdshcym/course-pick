@@ -1,24 +1,29 @@
-<table>
-    <tr>
-        <td><td>
-        <td>周一</td>
-        <td>周二</td>
-        <td>周三</td>
-        <td>周四</td>
-        <td>周五</td>
-        <td>周六</td>
-        <td>周日</td>
-    </tr>
+{% extends "base.html" %}
+{% block content %}
+<table class="ui celled structured table">
+    <thead>
+        <tr>
+            <td></td>
+            <th>周一</th>
+            <th>周二</th>
+            <th>周三</th>
+            <th>周四</th>
+            <th>周五</th>
+            <th>周六</th>
+            <th>周日</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for classtime in class_table %}
     <tr>
         <th>{{ forloop.counter }}</th>
         {% for time in classtime %}
-        {% if time %}
-        <td rowspan="{{ time.end }} - {{ time.begin }} + 1">{{ time.course }}</td>
-        {% else %}
-        <td></td>
+        {% if time != None %}
+        <td rowspan="{{ time.get_span }}" class="center aligned">{{ time.course }}</td>
         {% endif %}
         {% endfor %}
     </tr>
     {% endfor %}
+    </tbody>
 </table>
+{% endblock %}
