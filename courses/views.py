@@ -8,13 +8,12 @@ from django.template.response import TemplateResponse
 from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
-from courses.forms import AddCourseForm
+from courses.forms import AddCourseForm, EditCourseForm
 
 @permission_required('courses.add_course')
 def add_course(request):
     if request.method == 'POST':
         form = AddCourseForm(request.POST)
-        # print form
         if form.is_valid():
             new_course = Course.objects.create(
                 id                 = request.POST['id'],
@@ -26,13 +25,23 @@ def add_course(request):
                 remark             = request.POST['remark'],
             )
 
-            # exam = request.POST['exam']
-            # new_exam = Exam.objects.create(
-            #     course=new_course,
-            #     method=exam['method'],
-            #     date=exam['date'],
-            #     time=exam['time'],
-            # )
+            return redirect('/')
+
+@permission_required('courses.change_course')
+def edit_course(request, course_id):
+    if request.method == 'POST':
+        form = EditCourseForm(request.POST)
+        if form.is_valid():
+            course = Course.objects.filter(id=course_id)
+            course.update(
+                name               = request.POST['name'],
+                college            = request.POST['college'],
+                classroom          = request.POST['classroom'],
+                score              = request.POST['score'],
+                max_student_number = request.POST['max_student_number'],
+                remark             = request.POST['remark'],
+            )
+
             return redirect('/')
 
 @permission_required('courses.change_course')
