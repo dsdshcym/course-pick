@@ -14,6 +14,18 @@ from accounts.tests import create_register_request
 from courses.models import Course, CourseTime, Exam
 from courses.views import add_course, delete_course, pick_course, search_course
 
+TEST_STUDENT_ID = 's001'
+TEST_STUDENT_NAME = 'test_student'
+
+TEST_TEACHER_ID = 't001'
+TEST_TEACHER_NAME = 'test_teacher'
+TEST_TEACHER_TITLE = 'test_title'
+
+TEST_MANAGER_ID = 'm001'
+TEST_MANAGER_NAME = 'test_manager'
+
+TEST_PASSWORD = 'password'
+
 def add_a_new_course_through_request(
         id,
         name,
@@ -68,18 +80,12 @@ class CourseModelTest(TestCase):
 
 class AddCourseViewTest(TestCase):
     def setUp(self):
-        teacher_register_request = create_register_request(
-            id='t0001',
-            name='test_teacher',
-            type=Teacher.user_type,
-            password='',
+        self.teacher = Teacher.objects.create(
+            id=TEST_TEACHER_ID,
+            name=TEST_TEACHER_NAME,
+            user=User.objects.create_user(username=TEST_TEACHER_ID, password=TEST_PASSWORD),
+            title=TEST_TEACHER_TITLE,
         )
-
-        teacher_register_request.POST['title'] = ''
-
-        teacher_register_response = register(teacher_register_request)
-
-        self.teacher = Teacher.objects.get(id='t0001')
 
         teacher_list = [self.teacher]
 
