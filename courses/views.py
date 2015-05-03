@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
 
+from django.http import HttpResponse
+
+from django.template.response import TemplateResponse
+
 from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
@@ -72,3 +76,14 @@ def drop_course(request):
         course = Course.objects.get(id=course_id)
         course.student.remove(student)
         return redirect('/')
+
+def search_course(request, search_content):
+    search_by_course = Course.objects.filter(name__icontains=search_content)
+    search_by_teacher = Course.objects.filter(teacher__name__icontains=search_content)
+    search_by_college = Course.objects.filter(college__icontains=search_content)
+    context = {
+        'teacher_results': search_by_teacher,
+        'course_results': search_by_course,
+        'college_results': search_by_college,
+    }
+    return TemplateResponse(request, "courses/search_results.html", context)
