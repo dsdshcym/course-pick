@@ -14,7 +14,6 @@ from courses.forms import AddCourseForm
 def add_course(request):
     if request.method == 'POST':
         form = AddCourseForm(request.POST)
-        # print form
         if form.is_valid():
             new_course = Course.objects.create(
                 id                 = request.POST['id'],
@@ -26,13 +25,6 @@ def add_course(request):
                 remark             = request.POST['remark'],
             )
 
-            # exam = request.POST['exam']
-            # new_exam = Exam.objects.create(
-            #     course=new_course,
-            #     method=exam['method'],
-            #     date=exam['date'],
-            #     time=exam['time'],
-            # )
             return redirect('/')
 
 @permission_required('courses.change_course')
