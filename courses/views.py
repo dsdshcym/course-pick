@@ -26,6 +26,13 @@ def add_course(request):
             )
 
             return redirect('/')
+    else:
+        form = AddCourseForm()
+
+    context = {
+        'form': form,
+    }
+    return TemplateResponse(request, 'courses/add_course.html', context)
 
 @permission_required('courses.change_course')
 def edit_course(request, course_id):
