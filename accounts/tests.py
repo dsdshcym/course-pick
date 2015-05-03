@@ -213,6 +213,7 @@ class LoginViewTest(TestCase):
                                         'username': TEST_STUDENT_ID,
                                         'password': TEST_PASSWORD,
                                     })
+        response = self.client.get(response.url)
         self.assertIn('/courses/student/', response.url)
 
     def test_teacher_login(self):
@@ -221,6 +222,7 @@ class LoginViewTest(TestCase):
                                         'username': TEST_TEACHER_ID,
                                         'password': TEST_PASSWORD,
                                     })
+        response = self.client.get(response.url)
         self.assertIn('/courses/teacher/', response.url)
 
     def test_manager_login(self):
@@ -229,4 +231,5 @@ class LoginViewTest(TestCase):
                                         'username': TEST_MANAGER_ID,
                                         'password': TEST_PASSWORD,
                                     })
+        response = self.client.get(response.url)
         self.assertIn('/courses/manager/', response.url)
