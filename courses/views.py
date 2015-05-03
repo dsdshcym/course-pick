@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 from accounts.models import Student, Teacher
 
 from courses.models import Course, Exam, CourseTime
-from courses.forms import AddCourseForm, EditCourseForm, DeleteCourseForm
+from courses.forms import AddCourseForm, EditCourseForm, DeleteCourseForm, PickCourseForm
 
 @permission_required('courses.add_course')
 def add_course(request):
@@ -109,18 +109,21 @@ def delete_course(request):
 @login_required
 def pick_course(request):
     if request.method == 'POST':
-        student_id = request.POST['student_id']
-        course_id = request.POST['course_id']
-        student = Student.objects.get(id=student_id)
-        course = Course.objects.get(id=course_id)
-        picked_courses = student.course_set.all()
-        for picked_course in picked_courses:
-            for picked_course_time in picked_course.coursetime_set.all():
-                for course_time in course.coursetime_set.all():
-                    if (course_time.weekday == picked_course_time.weekday) and (course_time.end >= picked_course_time.begin) and (picked_course_time.end >= course_time.begin):
-                        return redirect('/')
-        course.student.add(student)
-        return redirect('/')
+        form = PickCourseForm(request.POST)
+        if form.is_valid():
+            student_id = form.cleaned_data['student_id']
+            course_id = form.cleaned_data['course_id']
+            student = Student.objects.get(id=student_id)
+            course = Course.objects.get(id=course_id)
+            course.student.add(student)
+            return redirect('/')
+    else:
+        form = PickCourseForm()
+
+    context = {
+        'form': form,
+    }
+    return TemplateResponse(request, 'courses/pick_course.html', context)
 
 def drop_course(request):
     if request.method == 'POST':
