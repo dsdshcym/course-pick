@@ -12,7 +12,7 @@ from accounts.views import register, MANAGER_PERMISSION
 from accounts.tests import create_register_request
 
 from courses.models import Course, CourseTime, Exam
-from courses.views import add_course, delete_course, pick_course
+from courses.views import add_course, delete_course, pick_course, search_course
 
 def add_a_new_course_through_request(
         id,
@@ -306,3 +306,37 @@ class DropCourseViewTest(TestCase):
         response = self.client.post('/courses/drop/', {'student_id': student_id, 'course_id': course_id})
 
         self.assertEqual(self.test_course.student.count(), 0)
+
+class SearchCourseTest(TestCase):
+    def setUp(self):
+        self.first_test_teacher = Teacher.objects.create(
+            id='t0001',
+            name='first_test_teacher',
+            user=User.objects.create(username='t0001',password=''),
+        )
+        self.first_test_course = Course.objects.create(
+            id='c0001',
+            name='first_test_course',
+            college='CS',
+            score=2.0,
+            max_student_number=50,
+        )
+        self.first_test_course.teachers.add(self.first_test_teacher)
+
+        self.second_test_teacher = Teacher.objects.create(
+            id='t0002',
+            name='second_test_teacher',
+            user=User.objects.create(username='t0002',password=''),
+        )
+        self.second_test_course = Course.objects.create(
+            id='c0002',
+            name='second_test_course',
+            college='CS',
+            score=2.0,
+            max_student_number=50,
+        )
+        self.second_test_course.teachers.add(self.second_test_teacher)
+
+    def test_search_for_a_class_with_teachers_name(self):
+        response = self.client.get('/courses/search/', {'search_content': 'first_test_teacher',})
+        self.assertEqual(response.context, [self.first_test_course])
