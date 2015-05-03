@@ -130,7 +130,7 @@ class AddCourseViewTest(TestCase):
 
     def test_manager_can_add_a_new_course(self):
         self.client.login(username=TEST_MANAGER_NAME, password=TEST_PASSWORD)
-        self.client.post('/courses/add', {
+        self.client.post('/courses/add/', {
             'id'                 : TEST_COURSE_ID,
             'name'               : TEST_COURSE_NAME,
             'college'            : TEST_COURSE_COLLEGE,
@@ -138,12 +138,11 @@ class AddCourseViewTest(TestCase):
             'score'              : TEST_COURSE_SCORE,
             'max_student_number' : TEST_COURSE_MAX_STUDENT_NUMBER,
             'remark'             : TEST_COURSE_REMARK,
-            'exam'               : self.exam,
         })
         courses = Course.objects.all()
         self.assertEqual(courses.count(), 1)
         new_course = courses.first()
-        self.assertEqual(new_course.name, 'test')
+        self.assertEqual(new_course.name, TEST_COURSE_NAME)
 
     # def test_add_a_new_course_need_teacher_info(self):
     #     saved_course = Course.objects.get(id='c0001')
