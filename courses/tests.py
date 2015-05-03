@@ -360,3 +360,33 @@ class SearchCourseTest(TestCase):
         college_results = response.context['college_results']
         self.assertEqual(college_results.count(), 1)
         self.assertIn(self.first_test_course, college_results)
+
+class StudentViewTest(TestCase):
+    def setUp(self):
+        self.test_student = Student.objects.create(
+            id=TEST_STUDENT_ID,
+            name=TEST_STUDENT_NAME,
+            user=User.objects.create_user(username=TEST_STUDENT_ID, password=TEST_PASSWORD)
+        )
+        self.test_course = Course.objects.create(
+            id='c0001',
+            name='test_course',
+            score=2.0,
+            max_student_number=50,
+        )
+        self.test_course_time = CourseTime.objects.create(
+            course=self.test_course,
+            weekday='Mon',
+            begin=1,
+            end=4,
+        )
+        self.test_course.student.add(self.test_student)
+        self.client.login(username=TEST_STUDENT_ID, password=TEST_PASSWORD)
+
+    def test_student_view_returns_picked_classes_info(self):
+        response = self.client.get('/courses/student/')
+        self.assertIn(self.test_course, response.context['courses'])
+
+    def test_student_view_returns_class_table_info(self):
+        response = self.client.get('/courses/student/')
+        self.assertIn(self.test_course, response.context['class_table'][0])
