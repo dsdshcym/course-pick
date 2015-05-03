@@ -59,19 +59,19 @@ def login(request):
 
             try:
                 if user.student:
-                    return redirect('/accounts/student/')
+                    return redirect('/courses/student/')
             except:
                 pass
 
             try:
                 if user.teacher:
-                    return redirect('/accounts/teacher/')
+                    return redirect('/courses/teacher/')
             except:
                 pass
 
             try:
                 if user.manager:
-                    return redirect('/accounts/manager/')
+                    return redirect('/courses/manager/')
             except:
                 pass
     else:
