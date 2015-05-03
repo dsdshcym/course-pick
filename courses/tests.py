@@ -96,12 +96,6 @@ class AddCourseViewTest(TestCase):
 
         self.manager.user.user_permissions = MANAGER_PERMISSION
 
-        self.exam = {
-            'method': Exam.KJ,
-            'date': timezone.now().date(),
-            'time': timezone.now().time(),
-        }
-
     def test_manager_can_add_a_new_course(self):
         self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
         self.client.post('/courses/add/', {
@@ -172,6 +166,12 @@ class AddCourseExtraInfoTest(TestCase):
             'end': 4,
         }
 
+        self.exam = {
+            'method': Exam.KJ,
+            'date': timezone.now().date(),
+            'time': timezone.now().time(),
+        }
+
         self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
 
         self.manager.user.user_permissions = MANAGER_PERMISSION
@@ -195,6 +195,15 @@ class AddCourseExtraInfoTest(TestCase):
         self.assertEqual(added_coursetime.count(), 1)
         self.assertEqual(added_coursetime.first().course, self.course)
         self.assertEqual(added_coursetime.first().weekday, self.coursetime['weekday'])
+
+    def test_a_manager_can_add_a_exam(self):
+        response = self.client.post('/courses/add/exam/' + TEST_COURSE_ID, self.exam)
+
+        added_exam = Exam.objects.all()
+
+        self.assertEqual(added_exam.count(), 1)
+        self.assertEqual(added_exam.first().course, self.course)
+        self.assertEqual(added_exam.first().method, self.exam['method'])
 
 class DeleteCourseViewTest(TestCase):
     def setUp(self):
