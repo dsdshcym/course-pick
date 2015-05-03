@@ -144,10 +144,10 @@ def student_view(request):
         'Sun': 6,
     }
     picked_courses = student.course_set.all()
-    class_table = [[None for j in range(8)] for i in range(15)]
+    class_table = [['' for j in range(7)] for i in range(14)]
     for picked_course in picked_courses:
         for course_time in picked_course.coursetime_set.all():
-            class_table[course_time.begin-1][WEEKDAY_ITER[course_time.weekday]] = picked_course
+            class_table[course_time.begin-1][WEEKDAY_ITER[course_time.weekday]] = course_time
 
     context = {
         'courses': picked_courses,

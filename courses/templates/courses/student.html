@@ -1,2 +1,24 @@
 <table>
+    <tr>
+        <td><td>
+        <td>周一</td>
+        <td>周二</td>
+        <td>周三</td>
+        <td>周四</td>
+        <td>周五</td>
+        <td>周六</td>
+        <td>周日</td>
+    </tr>
+    {% for classtime in class_table %}
+    <tr>
+        <th>{{ forloop.counter }}</th>
+        {% for time in classtime %}
+        {% if time %}
+        <td rowspan="{{ time.end }} - {{ time.begin }} + 1">{{ time.course }}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
 </table>
