@@ -54,11 +54,16 @@ def edit_course(request, course_id):
 @permission_required('courses.change_course')
 def add_course_teacher(request, course_id):
     if request.method == 'POST':
-        teacher_id = request.POST['id']
-        course = Course.objects.get(id=course_id)
-        teacher = Teacher.objects.get(id=teacher_id)
-        course.teacher.add(teacher)
-        return redirect('/courses/add/coursetime/'+course_id)
+        request.POST['course_id'] = course_id
+        form = AddCourseTeacherForm(request.POST)
+        if form.is_valid():
+            teacher_id = form.cleaned_data['teacher_id']
+            course_id = form.cleaned_data['course_id']
+            course = Course.objects.get(id=course_id)
+            teacher = Teacher.objects.get(id=teacher_id)
+            course.teacher.add(teacher)
+            return redirect('/courses/add/coursetime/'+course_id)
+    return redirect('/courses/extra_info/')
 
 @permission_required('courses.add_coursetime')
 def add_coursetime(request, course_id):

@@ -194,7 +194,7 @@ class AddCourseExtraInfoTest(TestCase):
 
     def test_a_manager_can_add_a_course_teacher(self):
         response = self.client.post('/courses/add/teacher/' + TEST_COURSE_ID, {
-            'id': TEST_TEACHER_ID,
+            'teacher_id': TEST_TEACHER_ID,
             'name': TEST_TEACHER_NAME,
         })
 
