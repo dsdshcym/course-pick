@@ -141,7 +141,7 @@ class AddCourseViewTest(TestCase):
     #     self.assertEqual(exam.first().date, self.exam['date'])
     #     self.assertEqual(exam.first().time, self.exam['time'])
 
-class AddCourseTeacherTest(TestCase):
+class AddCourseExtraInfoTest(TestCase):
     def setUp(self):
         self.teacher = Teacher.objects.create(
             id=TEST_TEACHER_ID,
@@ -150,39 +150,6 @@ class AddCourseTeacherTest(TestCase):
             title=TEST_TEACHER_TITLE,
         )
 
-        self.course = Course.objects.create(
-            id                 = TEST_COURSE_ID,
-            name               = TEST_COURSE_NAME,
-            college            = TEST_COURSE_COLLEGE,
-            classroom          = TEST_COURSE_CLASSROOM,
-            score              = TEST_COURSE_SCORE,
-            max_student_number = TEST_COURSE_MAX_STUDENT_NUMBER,
-            remark             = TEST_COURSE_REMARK,
-        )
-
-        self.manager = Manager.objects.create(
-            id=TEST_MANAGER_ID,
-            name=TEST_MANAGER_NAME,
-            user=User.objects.create_user(username=TEST_MANAGER_ID, password=TEST_PASSWORD),
-        )
-
-        self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
-
-        self.manager.user.user_permissions = MANAGER_PERMISSION
-
-    def test_a_manager_can_add_a_course_teacher(self):
-        response = self.client.post('/courses/add/teacher/' + TEST_COURSE_ID, {
-            'id': TEST_TEACHER_ID,
-            'name': TEST_TEACHER_NAME,
-        })
-
-        added_teacher = self.course.teacher.all()
-
-        self.assertEqual(added_teacher.count(), 1)
-        self.assertEqual(added_teacher.first(), self.teacher)
-
-class AddCourseTimeTest(TestCase):
-    def setUp(self):
         self.course = Course.objects.create(
             id                 = TEST_COURSE_ID,
             name               = TEST_COURSE_NAME,
@@ -208,6 +175,17 @@ class AddCourseTimeTest(TestCase):
         self.client.login(username=TEST_MANAGER_ID, password=TEST_PASSWORD)
 
         self.manager.user.user_permissions = MANAGER_PERMISSION
+
+    def test_a_manager_can_add_a_course_teacher(self):
+        response = self.client.post('/courses/add/teacher/' + TEST_COURSE_ID, {
+            'id': TEST_TEACHER_ID,
+            'name': TEST_TEACHER_NAME,
+        })
+
+        added_teacher = self.course.teacher.all()
+
+        self.assertEqual(added_teacher.count(), 1)
+        self.assertEqual(added_teacher.first(), self.teacher)
 
     def test_a_manager_can_add_a_coursetime(self):
         response = self.client.post('/courses/add/coursetime/' + TEST_COURSE_ID, self.coursetime)
