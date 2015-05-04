@@ -11,14 +11,20 @@
                     <h4 class="ui dividing header">登录</h4>
                     <div class="field">
                         <label>用户名</label>
-                        {{ form.username }}
+                        <div class="ui input icon">
+                            <i class="user icon"></i>
+                            {{ form.username }}
+                        </div>
                         <div class="ui error">
                             {{ form.username.errors }}
                         </div>
                     </div>
                     <div class="field">
                         <label>密码</label>
-                        {{ form.password }}
+                        <div class="ui input icon">
+                            <i class="lock icon"></i>
+                            {{ form.password }}
+                        </div>
                         <div class="ui error">
                             {{ form.password.errors }}
                         </div>
