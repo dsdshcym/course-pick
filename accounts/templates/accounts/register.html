@@ -11,28 +11,40 @@
                     <h4 class="ui dividing header">注册</h4>
                     <div class="field">
                         <label>学号/工号</label>
-                        {{ form.id }}
+                        <div class="ui icon input">
+                            <i class="info icon"></i>
+                            {{ form.id }}
+                        </div>
                         <div>
                             {{ form.id.errors }}
                         </div>
                     </div>
                     <div class="field">
                         <label>姓名</label>
-                        {{ form.name }}
+                        <div class="ui icon input">
+                            <i class="user icon"></i>
+                            {{ form.name }}
+                        </div>
                         <div>
                             {{ form.name.errors }}
                         </div>
                     </div>
                     <div class="field">
                         <label>密码</label>
-                        {{ form.password }}
+                        <div class="ui icon input">
+                            <i class="lock icon"></i>
+                            {{ form.password }}
+                        </div>
                         <div>
                             {{ form.password.errors }}
                         </div>
                     </div>
                     <div class="field">
                         <label>确认密码</label>
-                        {{ form.confirm_password }}
+                        <div class="ui icon input">
+                            <i class="repeat icon"></i>
+                            {{ form.confirm_password }}
+                        </div>
                         <div>
                             {{ form.confirm_password.errors }}
                         </div>
@@ -43,7 +55,10 @@
                     </div>
                     <div id="title_div" style="display:none;" class="field">
                         <label>职称</label>
-                        {{ form.title }}
+                        <div class="ui icon input">
+                            <i class="tag icon"></i>
+                            {{ form.title }}
+                        </div>
                     </div>
                     <button class="ui fluid green button">注册</button>
                 </form>
