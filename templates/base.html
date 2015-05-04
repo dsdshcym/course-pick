@@ -17,13 +17,34 @@
                 <a class="popup icon github item" data-content="View project on GitHub" href="https://github.com/dsdshcym/course-pick">
                     <i class="alternate github icon"></i>
                 </a>
+                <div class="ui right item" style="height:34px;padding-top: 5px;padding-top: 5px;">
+                    <div class="ui search">
+                        <div class="ui icon input" style="height:25px">
+                            <input class="prompt" type="text" placeholder="搜索课程">
+                            <i class="search icon"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         {% block content %}
         {% endblock %}
+        <div class="ui black footer">
+            <div class="aligned center">&copy;&nbsp;Copyright 2015 <a href="http://dsdshome.github.io">dsdshcym</a></div>
+        </div>
     </body>
 
     <script>
-        $('.popup').popup();
+     $('.popup').popup();
+
+     $('.ui.search')
+        .search({
+            apiSettings: {
+                url: '/courses/search/{query}'
+            }
+        })
     </script>
+
+    {% block script %}
+    {% endblock %}
 </html>
