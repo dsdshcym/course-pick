@@ -3,45 +3,70 @@
 
 {% block content %}
 <div>
-    <form action="" method="post">
-        {% csrf_token %}
-        <div>
-            <label>学号/工号</label>
-            {{ form.id }}
-            <div>
-                {{ form.id.errors }}
+    <div class="ui two column doubling ui grid">
+        <div class="ui column">
+            <div class="ui segment">
+                <form action="" method="post" class="ui form">
+                    {% csrf_token %}
+                    <h4 class="ui dividing header">注册</h4>
+                    <div class="field">
+                        <label>学号/工号</label>
+                        {{ form.id }}
+                        <div>
+                            {{ form.id.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>姓名</label>
+                        {{ form.name }}
+                        <div>
+                            {{ form.name.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>密码</label>
+                        {{ form.password }}
+                        <div>
+                            {{ form.password.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>确认密码</label>
+                        {{ form.confirm_password }}
+                        <div>
+                            {{ form.confirm_password.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>用户组</label>
+                        {{ form.type }}
+                    </div>
+                    <div id="title_div" style="display:none;" class="field">
+                        <label>职称</label>
+                        {{ form.title }}
+                    </div>
+                    <button class="ui fluid green button">注册</button>
+                </form>
             </div>
         </div>
-        <div>
-            <label>姓名</label>
-            {{ form.name }}
-            <div>
-                {{ form.name.errors }}
+        <div class="column">
+            <div class="ui segment">
+                <p>欢迎来到选课系统，请注册</p>
             </div>
         </div>
-        <div>
-            <label>密码</label>
-            {{ form.password }}
-            <div>
-                {{ form.password.errors }}
-            </div>
-        </div>
-        <div>
-            <label>确认密码</label>
-            {{ form.confirm_password }}
-            <div>
-                {{ form.confirm_password.errors }}
-            </div>
-        </div>
-        <div>
-            <label>用户组</label>
-            {{ form.type }}
-        </div>
-        <div>
-            <label>职称</label>
-            {{ form.title }}
-        </div>
-        <input type="submit" value="注册" class="ui green button">
-    </form>
+    </div>
 </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#id_type").change(function() {
+    if ($("#id_type").val() == "teacher") {
+        $('#title_div').show()
+    } else {
+        $('#title_div').hide()
+    }
+    })
+</script>
 {% endblock %}
