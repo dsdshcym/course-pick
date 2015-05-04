@@ -9,7 +9,7 @@
                 <form method="post" action="" class="ui form">
                     {% csrf_token %}
                     <h4 class="ui dividing header">登录</h4>
-                    <div>
+                    <div class="field">
                         <label>用户名</label>
                         {{ form.username }}
                         <div class="ui error">
@@ -23,7 +23,6 @@
                             {{ form.password.errors }}
                         </div>
                     </div>
-                    <input type="hidden" name="next" value="/" />
                     <div class="ui two fluid buttons">
                         <button class="ui green button">登录</button>
                         <a class="ui red button" href="/accounts/register/">注册</a>
