@@ -17,6 +17,9 @@
                 <a class="popup icon github item" data-content="View project on GitHub" href="https://github.com/dsdshcym/course-pick">
                     <i class="alternate github icon"></i>
                 </a>
+                {% if user.is_authenticated %}
+                <a class="item" href="/accounts/logout/">退出</a>
+                {% endif %}
                 <div class="ui right item" style="height:34px;padding-top: 5px;padding-top: 5px;">
                     <div class="ui search">
                         <div class="ui icon input" style="height:25px">
