@@ -61,12 +61,15 @@
 
 {% block script %}
 <script>
+    $("#id_type").addClass("ui selection dropdown");
+     $('select.dropdown')
+                 .dropdown();
     $("#id_type").change(function() {
     if ($("#id_type").val() == "teacher") {
         $('#title_div').show()
     } else {
         $('#title_div').hide()
     }
-    })
+    });
 </script>
 {% endblock %}
