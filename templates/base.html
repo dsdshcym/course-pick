@@ -2,14 +2,28 @@
 {% load staticfiles %}
 <html lang="zh-cn">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="{% static 'javascript/jquery-1.11.1.min.js' %}"></script>
         <script src="{% static 'javascript/semantic.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
         <title>{% block title %}{% endblock %} - 选课</title>
     </head>
-
     <body>
-    {% block content %}
-    {% endblock %}
+        <div class="ui inverted main menu">
+            <div class="container">
+                <div class="title item">
+                    <b>选课系统</b>
+                </div>
+                <a class="popup icon github item" data-content="View project on GitHub" href="https://github.com/dsdshcym/course-pick">
+                    <i class="alternate github icon"></i>
+                </a>
+            </div>
+        </div>
+        {% block content %}
+        {% endblock %}
     </body>
+
+    <script>
+        $('.popup').popup();
+    </script>
 </html>
