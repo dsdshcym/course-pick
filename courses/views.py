@@ -58,7 +58,6 @@ def edit_course(request, course_id):
             return render(request,  'courses/detail.html', context)
     return redirect('/courses/detail/' + course_id)
 
-@permission_required('courses.add_coursetime')
 def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), coursetime_form=AddCourseTimeForm(), exam_form=None):
     course = Course.objects.get(id=course_id)
     if exam_form is None:
