@@ -63,13 +63,15 @@ class PickCourseForm(forms.Form):
             student = Student.objects.get(id=student_id)
             course = Course.objects.get(id=course_id)
             if student in course.student.all():
-                raise forms.ValidationError('该学生已选了这门课')
+                self.add_error('course_id', '不能重复选课')
+                return self.cleaned_data
             picked_courses = student.course_set.all()
             for picked_course in picked_courses:
                 for picked_course_time in picked_course.coursetime_set.all():
                     for course_time in course.coursetime_set.all():
                         if check_time_conflict(course_time, picked_course_time):
-                            raise forms.ValidationError('与已选课程时间冲突')
+                            self.add_error('course_id', '与已选课程时间冲突')
+                            return self.cleaned_data
         return self.cleaned_data
 
 class DropCourseForm(forms.Form):
