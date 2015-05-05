@@ -56,4 +56,38 @@
     {% endif %}
     <button class="ui green button">提交</button>
 </form>
+
+<form class="ui form" action="/courses/add/exam/{{ course_id }}" method="post">
+    {% csrf_token %}
+    <h4 class="ui dividing header">考试信息</h4>
+    <div class="field">
+        <label for="">形式</label>
+        <div class="ui input">
+            {{ exam_form.method }}
+        </div>
+    </div>
+    <div class="field">
+        <label for="">日期</label>
+        <div class="ui input">
+            {{ exam_form.date }}
+        </div>
+    </div>
+    <div class="field">
+        <label for="">时间</label>
+        <div class="ui input">
+            {{ exam_form.time }}
+        </div>
+    </div>
+    {% if exam_form.errors %}
+    <div class="ui message">
+        {{ exam_form.errors }}
+    </div>
+    {% endif %}
+    {% if exam_form.success %}
+    <div class="ui message">
+        {{ exam_form.success }}
+    </div>
+    {% endif %}
+    <button class="ui green button">提交</button>
+</form>
 {% endblock %}
