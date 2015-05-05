@@ -82,14 +82,14 @@ class DropCourseForm(forms.Form):
         id = self.cleaned_data['student_id']
         exists = Student.objects.filter(id=id).count()
         if exists == 0:
-            raise forms.ValidationError('该学生未注册，请核对')
+            self.add_error('student_id', '该学生未注册，请核对')
         return id
 
     def clean_course_id(self):
         id = self.cleaned_data['course_id']
         exists = Course.objects.filter(id=id).count()
         if exists == 0:
-            raise forms.ValidationError('该课程不存在，请核对')
+            self.add_error('course_id', '该课程不存在，请核对')
         return id
 
     def clean(self):
@@ -98,7 +98,7 @@ class DropCourseForm(forms.Form):
         student = Student.objects.get(id=student_id)
         course = Course.objects.get(id=course_id)
         if student not in course.student.all():
-            raise forms.ValidationError('该学生未选这门课')
+            self.add_error('course_id', '不能退未选的课程')
         return self.cleaned_data
 
 class AddCourseTeacherForm(forms.Form):
