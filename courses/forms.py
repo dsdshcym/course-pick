@@ -108,7 +108,7 @@ class AddCourseTeacherForm(forms.Form):
         return id
 
 class AddCourseTimeForm(forms.Form):
-    course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+    course_id = forms.CharField(error_messages={'max_length': '最多为 20 个字符'}, max_length=20, required=False)
     weekday = forms.ChoiceField(choices=CourseTime.WEEKDAY_CHOICES)
     begin = forms.ChoiceField(choices=CourseTime.COURSE_TIME_CHOICES)
     end = forms.ChoiceField(choices=CourseTime.COURSE_TIME_CHOICES)
@@ -120,9 +120,17 @@ class AddCourseTimeForm(forms.Form):
             raise forms.ValidationError('该课程不存在，请核对')
         return id
 
+    def clean_begin(self):
+        begin = self.cleaned_data['begin']
+        return int(begin)
+
+    def clean_end(self):
+        end = self.cleaned_data['end']
+        return int(end)
+
     def clean(self):
         course_id = self.cleaned_data['course_id']
-        course = Course.objeds.get(id=course_id)
+        course = Course.objects.get(id=course_id)
 
         weekday = self.cleaned_data['weekday']
         begin = self.cleaned_data['begin']
@@ -137,9 +145,10 @@ class AddCourseTimeForm(forms.Form):
 
         old_course_times = course.coursetime_set.filter(weekday=weekday)
 
-        for old_course_time in course.course_times:
+        for old_course_time in old_course_times:
             if check_time_conflict(new_course_time, old_course_time):
-                raise forms.ValidationError('该时间与已有时间冲突，请核对')
+                self.add_error('begin', '该时间与已有时间冲突，请核对')
+                break
 
         return self.cleaned_data
 
