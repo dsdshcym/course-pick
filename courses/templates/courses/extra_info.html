@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form class="ui form" action="/courses/add/teacher/{{ course_id }}" method="post">
+    {% csrf_token %}
+    <h4 class="ui dividing header">添加教师</h4>
+    <div class="field">
+        <label for="">教师工号</label>
+        <div class="ui input">
+            {{ teacher_form.teacher_id }}
+        </div>
+    </div>
+    {% if teacher_form.errors %}
+    <div class="ui message">
+        {{ teacher_form.teacher_id.errors }}
+    </div>
+    {% endif %}
+    <button class="ui green button">提交</button>
+</form>
+{% endblock %}
