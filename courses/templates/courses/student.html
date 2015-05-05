@@ -1,5 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
+{% if message %}
+<div class="ui message">
+
+</div>
+{% endif %}
+<form class="ui form" action="/courses/pick/" method="post">
+    {% csrf_token %}
+    <h4 class="ui dividing header">选课</h4>
+    <div class="field">
+        <label for="">课程号</label>
+        <div class="ui input icon">
+            <i class="book icon"></i>
+            <input name="course_id" type="text" value=""/>
+        </div>
+    </div>
+    <div style="display:none">
+        <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+        <input type="submit">
+    </div>
+</form>
+
+<form class="ui form" action="">
+    <h4 class="ui dividing header">退课</h4>
+    <div class="field">
+        <label for="">课程号</label>
+        <div class="ui input icon">
+            <i class="book icon"></i>
+            <input name="course_id" type="text" value=""/>
+        </div>
+    </div>
+    <div style="display:none">
+        <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+    </div>
+</form>
 <table class="ui celled structured table">
     <thead>
         <tr>
