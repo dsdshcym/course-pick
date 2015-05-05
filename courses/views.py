@@ -64,12 +64,16 @@ def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), courseti
     if exam_form is None:
         try:
             exam = course.exam
+            print exam
             exam_form = AddExamForm(
-                course_id=course.id,
-                method=exam.method,
-                date=exam.date,
-                time=exam.time,
+                {
+                    'course_id': course.id,
+                    'method': exam.method,
+                    'date': exam.date,
+                    'time': exam.time,
+                }
             )
+            print exam_form
         except:
             exam_form = AddExamForm()
     context = {
