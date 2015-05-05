@@ -20,7 +20,7 @@ class AddCourseForm(forms.Form):
     classroom = forms.CharField(error_messages={'required': '上课教室不能为空', 'max_length': '最多为 40 个字符'}, max_length=40)
     score = forms.DecimalField(error_messages={'required': '学分不能为空', }, max_digits=3, decimal_places=1)
     max_student_number = forms.IntegerField(error_messages={'required': '最大学生人数不能为空', 'min_value': '最大学生人数至少为 1 人', }, min_value=0)
-    remark = forms.CharField(error_messages={'max_length': '最多为 100 个字符'}, max_length=100, required=False)
+    remark = forms.CharField(error_messages={'max_length': '最多为 100 个字符'}, max_length=100, required=False, widget=forms.Textarea)
 
     def clean_id(self):
         id = self.cleaned_data['id']
@@ -35,7 +35,7 @@ class EditCourseForm(forms.Form):
     classroom = forms.CharField(error_messages={'required': '上课教室不能为空', 'max_length': '最多为 40 个字符'}, max_length=40)
     score = forms.DecimalField(error_messages={'required': '学分不能为空', }, max_digits=3, decimal_places=1)
     max_student_number = forms.IntegerField(error_messages={'required': '最大学生人数不能为空', 'min_value': '最大学生人数至少为 1 人', }, min_value=0)
-    remark = forms.CharField(error_messages={'max_length': '最多为 100 个字符'}, max_length=100, required=False)
+    remark = forms.CharField(error_messages={'max_length': '最多为 100 个字符'}, max_length=100, required=False, widget=forms.Textarea)
 
 class DeleteCourseForm(forms.Form):
     id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
