@@ -172,7 +172,7 @@ def pick_course(request):
             course.student.add(student)
             message = '选课成功'
         else:
-            message = form['course_id'].errors
+            message = form['course_id'].errors[0]
         return student_view(request, message)
     return redirect('/')
 
@@ -186,14 +186,11 @@ def drop_course(request):
             student = Student.objects.get(id=student_id)
             course = Course.objects.get(id=course_id)
             course.student.remove(student)
-            return redirect('/')
-    else:
-        form = DropCourseForm()
-
-    context = {
-        'form': form,
-    }
-    return TemplateResponse(request, 'courses/drop_course.html', context)
+            message = '退课成功'
+        else:
+            message = form['course_id'].errors[0]
+        return student_view(request, message)
+    return redirect('/')
 
 def search_course(request):
     search_content = request.GET['q']
