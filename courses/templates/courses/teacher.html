@@ -7,33 +7,73 @@
 {% endif %}
 <form class="ui form" action="/courses/pick/" method="post">
     {% csrf_token %}
-    <h4 class="ui dividing header">选课</h4>
+    <h4 class="ui dividing header">学生选课</h4>
     <div class="field">
         <label for="">课程号</label>
-        <div class="ui input icon">
-            <i class="book icon"></i>
-            <input name="course_id" type="text" value=""/>
+        <div class="ui search">
+            <div class="ui input icon">
+                <i class="book icon"></i>
+                <input class="prompt" name="course_id" type="text" value=""/>
+            </div>
+            <div class="results"></div>
         </div>
     </div>
-    <div style="display:none">
-        <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
-        <input type="submit">
+    <div class="field">
+        <label for="">学生学号</label>
+        <div class="ui input icon">
+            <i class="add user icon"></i>
+            <input name="student_id" type="text" value=""/>
+        </div>
     </div>
+    <button class="ui green button">提交</button>
 </form>
 
 <form class="ui form" action="/courses/drop/" method="post">
     {% csrf_token %}
-    <h4 class="ui dividing header">退课</h4>
+    <h4 class="ui dividing header">学生退课</h4>
     <div class="field">
         <label for="">课程号</label>
-        <div class="ui input icon">
-            <i class="book icon"></i>
-            <input name="course_id" type="text" value=""/>
+        <div class="ui search">
+            <div class="ui input icon">
+                <i class="book icon"></i>
+                <input class="prompt" name="course_id" type="text" value=""/>
+            </div>
+            <div class="results"></div>
         </div>
     </div>
-    <div style="display:none">
-        <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
-        <input type="submit">
+    <div class="field">
+        <label for="">学生学号</label>
+        <div class="ui input icon">
+            <i class="add user icon"></i>
+            <input name="student_id" type="text" value=""/>
+        </div>
     </div>
+    <button class="ui green button">提交</button>
 </form>
+{% endblock %}
+
+{% block script %}
+{% if courses %}
+<script>
+// searches across any array/object of searchable objects
+ $( document ).ready(function() {
+     var content = [
+         {% for course in courses %}
+         {
+             title: '{{ course.id }}',
+             description: '{{ course.name }}'
+         },
+         {% endfor %}
+     ];
+     $('.ui.search')
+        .search({
+            source: content,
+            searchFields: [
+                'title'
+            ],
+            searchFullText: false
+        });
+ })
+</script>
+{% endif %}
 {% endblock %}
