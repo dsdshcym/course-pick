@@ -26,10 +26,11 @@
     <h4 class="ui dividing header">退课</h4>
     <div class="field">
         <label for="">课程号</label>
-        <div class="ui input icon">
-            <i class="book icon"></i>
-            <input name="course_id" type="text" value=""/>
-        </div>
+        <select class="ui search dropdown" name="course_id">
+            {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div style="display:none">
         <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
@@ -62,4 +63,14 @@
     {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block script %}
+{% if courses %}
+<script>
+ $('select.dropdown')
+          .dropdown()
+     ;
+</script>
+{% endif %}
 {% endblock %}
