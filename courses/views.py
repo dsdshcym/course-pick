@@ -191,6 +191,17 @@ def student_view(request):
 
     return TemplateResponse(request, 'courses/student.html', context)
 
+@login_required
+def manager_view(request):
+    user = request.user
+
+    try:
+        manager = user.manager
+    except:
+        return redirect('/')
+
+    return render(request, 'courses/manager.html')
+
 def detail(request, course_id):
     course = Course.objects.get(id=course_id)
     form = EditCourseForm(
