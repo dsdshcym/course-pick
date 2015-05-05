@@ -37,18 +37,6 @@ class EditCourseForm(forms.Form):
     max_student_number = forms.IntegerField(error_messages={'required': '最大学生人数不能为空', 'min_value': '最大学生人数至少为 1 人', }, min_value=0)
     remark = forms.CharField(error_messages={'max_length': '最多为 100 个字符'}, max_length=100, required=False, widget=forms.Textarea)
 
-class DeleteCourseForm(forms.Form):
-    id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
-    name = forms.CharField(error_messages={'required': '课程名不能为空', 'max_length': '最多为 40 个字符'}, max_length=40)
-
-    def clean(self):
-        id = self.cleaned_data['id']
-        name = self.cleaned_data['name']
-        exists = Course.objects.filter(id=id, name=name).count()
-        if exists == 0:
-            raise forms.ValidationError('该课程不存在，请核对')
-        return self.cleaned_data
-
 class PickCourseForm(forms.Form):
     student_id = forms.CharField(error_messages={'required': '学号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
     course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
