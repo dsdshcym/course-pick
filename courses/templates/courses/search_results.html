@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="ui sortable table">
+    <thead>
+        <th>课程编号</th>
+        <th>课程名称</th>
+        <th>开课院系</th>
+        <th>上课教室</th>
+        <th>学分</th>
+        <th>最大学生人数</th>
+        <th>备注</th>
+    </thead>
+    <tbody>
+        {% for course in college_results %}
+        <tr>
+            <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.college }}</td>
+            <td>{{ course.classroom }}</td>
+            <td>{{ course.score }}</td>
+            <td>{{ course.max_student_number }}</td>
+            <td>{{ course.remark }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+{% endblock %}
