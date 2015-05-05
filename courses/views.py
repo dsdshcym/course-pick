@@ -102,7 +102,7 @@ def add_exam(request, course_id):
         method = request.POST['method']
         date = request.POST['date']
         time = request.POST['time']
-        exam = Exam.objects.create(
+        exam = Exam.objects.update_or_create(
             course=course,
             method=method,
             date=date,
