@@ -91,16 +91,26 @@
     </div>
     {% if user.manager %}
     <button class="ui green button">提交</button>
+    <input type="submit" class="ui red button" form="delete_form" value="删除课程"></button>
     {% endif %}
 </form>
+{% if user.manager %}
+<form action="/courses/delete/" method="post" id="delete_form">
+    {% csrf_token %}
+    <input name="id" value="{{ form.id }}" style="display:none;">
+    <div style="display:none;">
+    {{ form.name }}
+    </div>
+</form>
+{% endif %}
 {% endblock %}
 
 {% block script %}
 {% if not user.manager %}
 <script>
-     $('input').each(function() {
-         $(this).attr('readonly', true);
-     })
+ $('input').each(function() {
+     $(this).attr('readonly', true);
+ })
      $('#id_remark').attr('readonly', true);
 </script>
 {% endif %}
