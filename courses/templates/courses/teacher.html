@@ -10,13 +10,11 @@
     <h4 class="ui dividing header">学生选课</h4>
     <div class="field">
         <label for="">课程号</label>
-        <div class="ui search">
-            <div class="ui input icon">
-                <i class="book icon"></i>
-                <input class="prompt" name="course_id" type="text" value=""/>
-            </div>
-            <div class="results"></div>
-        </div>
+        <select class="ui search dropdown" name="course_id">
+            {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div class="field">
         <label for="">学生学号</label>
@@ -33,13 +31,11 @@
     <h4 class="ui dividing header">学生退课</h4>
     <div class="field">
         <label for="">课程号</label>
-        <div class="ui search">
-            <div class="ui input icon">
-                <i class="book icon"></i>
-                <input class="prompt" name="course_id" type="text" value=""/>
-            </div>
-            <div class="results"></div>
-        </div>
+        <select class="ui search dropdown" name="course_id">
+            {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div class="field">
         <label for="">学生学号</label>
@@ -55,25 +51,9 @@
 {% block script %}
 {% if courses %}
 <script>
-// searches across any array/object of searchable objects
- $( document ).ready(function() {
-     var content = [
-         {% for course in courses %}
-         {
-             title: '{{ course.id }}',
-             description: '{{ course.name }}'
-         },
-         {% endfor %}
-     ];
-     $('.ui.search')
-        .search({
-            source: content,
-            searchFields: [
-                'title'
-            ],
-            searchFullText: false
-        });
- })
+ $('select.dropdown')
+          .dropdown()
+     ;
 </script>
 {% endif %}
 {% endblock %}
