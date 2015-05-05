@@ -149,7 +149,8 @@ def drop_course(request):
     }
     return TemplateResponse(request, 'courses/drop_course.html', context)
 
-def search_course(request, search_content):
+def search_course(request):
+    search_content = request.GET['q']
     search_by_id = Course.objects.filter(id__icontains=search_content)
     search_by_course = Course.objects.filter(name__icontains=search_content)
     search_by_teacher = Course.objects.filter(teacher__name__icontains=search_content)

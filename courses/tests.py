@@ -420,25 +420,25 @@ class SearchCourseTest(TestCase):
         self.second_test_course.teacher.add(self.second_test_teacher)
 
     def test_search_for_a_class_with_course_id(self):
-        response = self.client.get('/courses/search/0001', )
+        response = self.client.get('/courses/search/?q=0001', )
         course_results = response.context['id_results']
         self.assertEqual(course_results.count(), 1)
         self.assertIn(self.first_test_course, course_results)
 
     def test_search_for_a_class_with_course_name(self):
-        response = self.client.get('/courses/search/first_test_course', )
+        response = self.client.get('/courses/search/?q=first_test_course', )
         course_results = response.context['course_results']
         self.assertEqual(course_results.count(), 1)
         self.assertIn(self.first_test_course, course_results)
 
     def test_search_for_a_class_with_teachers_name(self):
-        response = self.client.get('/courses/search/first_test_teacher', )
+        response = self.client.get('/courses/search/?q=first_test_teacher', )
         teacher_results = response.context['teacher_results']
         self.assertEqual(teacher_results.count(), 1)
         self.assertIn(self.first_test_course, teacher_results)
 
     def test_search_for_a_class_with_college_name(self):
-        response = self.client.get('/courses/search/cs', )
+        response = self.client.get('/courses/search/?q=cs', )
         college_results = response.context['college_results']
         self.assertEqual(college_results.count(), 1)
         self.assertIn(self.first_test_course, college_results)
