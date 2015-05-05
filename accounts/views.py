@@ -50,6 +50,9 @@ def register(request):
     return TemplateResponse(request, "accounts/register.html", context)
 
 def login(request):
+    if hasattr(request, 'user'):
+        if request.user.is_authenticated():
+            return redirect('/')
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
