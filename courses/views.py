@@ -213,7 +213,7 @@ def search_course(request):
     return TemplateResponse(request, "courses/search_results.html", context)
 
 @login_required
-def student_view(request):
+def student_view(request, message=None):
     user = request.user
     try:
         student = user.student
@@ -239,6 +239,7 @@ def student_view(request):
     context = {
         'courses': picked_courses,
         'class_table': class_table,
+        'message': message,
     }
 
     return TemplateResponse(request, 'courses/student.html', context)
