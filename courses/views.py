@@ -86,17 +86,25 @@ def add_course_teacher(request, course_id):
 @permission_required('courses.add_coursetime')
 def add_coursetime(request, course_id):
     if request.method == 'POST':
-        course = Course.objects.get(id=course_id)
-        weekday = request.POST['weekday']
-        begin = request.POST['begin']
-        end = request.POST['end']
-        coursetime = CourseTime.objects.create(
-            course=course,
-            weekday=weekday,
-            begin=begin,
-            end=end,
-        )
-        return redirect('/courses/add/exam/'+course_id)
+        data = request.POST.dict()
+        data['course_id'] = course_id
+        form = AddCourseTimeForm(data)
+        if form.is_valid():
+            course = Course.objects.get(id=course_id)
+            weekday = form.cleaned_data['weekday']
+            begin = form.cleaned_data['begin']
+            end = form.cleaned_data['end']
+            coursetime = CourseTime.objects.create(
+                course=course,
+                weekday=weekday,
+                begin=begin,
+                end=end,
+            )
+            form = AddCourseTimeForm()
+            form.success = '添加上课时间成功'
+    else:
+        form = AddCourseTimeForm()
+    return extra_info(request, course_id, coursetime_form=form)
 
 @permission_required('courses.add_exam')
 def add_exam(request, course_id):
