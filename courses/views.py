@@ -59,12 +59,24 @@ def edit_course(request, course_id):
     return redirect('/courses/detail/' + course_id)
 
 @permission_required('courses.add_coursetime')
-def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), coursetime_form=AddCourseTimeForm()):
+def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), coursetime_form=AddCourseTimeForm(), exam_form=None):
     course = Course.objects.get(id=course_id)
+    if exam_form is None:
+        try:
+            exam = course.exam
+            exam_form = AddExamForm(
+                course_id=course.id,
+                method=exam.method,
+                date=exam.date,
+                time=exam.time,
+            )
+        except:
+            exam_form = AddExamForm()
     context = {
         'course_id': course_id,
         'teacher_form': teacher_form,
         'coursetime_form': coursetime_form,
+        'exam_form': exam_form,
     }
     return TemplateResponse(request, 'courses/extra_info.html', context)
 
@@ -109,17 +121,31 @@ def add_coursetime(request, course_id):
 @permission_required('courses.add_exam')
 def add_exam(request, course_id):
     if request.method == 'POST':
-        course = Course.objects.get(id=course_id)
-        method = request.POST['method']
-        date = request.POST['date']
-        time = request.POST['time']
-        exam = Exam.objects.update_or_create(
-            course=course,
-            method=method,
-            date=date,
-            time=time,
-        )
-        return redirect('/courses/manager/')
+        data = request.POST.dict()
+        data['course_id'] = course_id
+        form = AddExamForm(data)
+        if form.is_valid():
+            course = Course.objects.get(id=course_id)
+            method = form.cleaned_data['method']
+            date = form.cleaned_data['date']
+            time = form.cleaned_data['time']
+            try:
+                exam = Exam.objects.filter(course=course).update(
+                    method=method,
+                    date=date,
+                    time=time,
+                )
+            except:
+                exam = Exam.objects.create(
+                    course=course,
+                    method=method,
+                    date=date,
+                    time=time,
+                )
+            form.success = '修改考试信息成功'
+    else:
+        form = AddExamForm()
+    return extra_info(request, course_id, exam_form=form)
 
 @permission_required('courses.delete_course')
 def delete_course(request):
