@@ -193,3 +193,21 @@ def student_view(request):
     }
 
     return TemplateResponse(request, 'courses/student.html', context)
+
+def detail(request, course_id):
+    course = Course.objects.get(id=course_id)
+    form = EditCourseForm(
+        {
+            'name': course.name,
+            'college': course.college,
+            'classroom': course.classroom,
+            'score': course.score,
+            'max_student_number': course.max_student_number,
+            'remark': course.remark,
+        }
+    )
+    form.id = course_id
+    context = {
+        'form': form,
+    }
+    return TemplateResponse(request, 'courses/detail.html', context)
