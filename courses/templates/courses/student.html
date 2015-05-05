@@ -2,7 +2,7 @@
 {% block content %}
 {% if message %}
 <div class="ui message">
-
+    {{ message }}
 </div>
 {% endif %}
 <form class="ui form" action="/courses/pick/" method="post">
@@ -21,7 +21,8 @@
     </div>
 </form>
 
-<form class="ui form" action="">
+<form class="ui form" action="/courses/drop/" method="post">
+    {% csrf_token %}
     <h4 class="ui dividing header">退课</h4>
     <div class="field">
         <label for="">课程号</label>
@@ -32,6 +33,7 @@
     </div>
     <div style="display:none">
         <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+        <input type="submit">
     </div>
 </form>
 <table class="ui celled structured table">
