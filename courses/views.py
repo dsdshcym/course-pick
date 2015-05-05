@@ -170,14 +170,11 @@ def pick_course(request):
             student = Student.objects.get(id=student_id)
             course = Course.objects.get(id=course_id)
             course.student.add(student)
-            return redirect('/')
-    else:
-        form = PickCourseForm()
-
-    context = {
-        'form': form,
-    }
-    return TemplateResponse(request, 'courses/pick_course.html', context)
+            message = '选课成功'
+        else:
+            message = form['course_id'].errors
+        return student_view(request, message)
+    return redirect('/')
 
 @login_required
 def drop_course(request):
