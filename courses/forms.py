@@ -4,7 +4,7 @@ from django import forms
 
 from accounts.models import Student, Teacher
 
-from courses.models import Course
+from courses.models import Course, CourseTime, Exam
 
 def check_time_conflict(course_time, old_course_time):
     if (course_time.weekday == old_course_time.weekday)\
@@ -126,34 +126,9 @@ class AddCourseTeacherForm(forms.Form):
 
 class AddCourseTimeForm(forms.Form):
     course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
-    WEEKDAY_CHOICES = (
-        ('Mon', '周一'),
-        ('Tue', '周二'),
-        ('Wed', '周三'),
-        ('Thu', '周四'),
-        ('Fri', '周五'),
-        ('Sat', '周六'),
-        ('Sun', '周日'),
-    )
-    COURSE_TIME_CHOICES = (
-        (1, '第 1 节'),
-        (2, '第 2 节'),
-        (3, '第 3 节'),
-        (4, '第 4 节'),
-        (5, '第 5 节'),
-        (6, '第 6 节'),
-        (7, '第 7 节'),
-        (8, '第 8 节'),
-        (9, '第 9 节'),
-        (10, '第 10 节'),
-        (11, '第 11 节'),
-        (12, '第 12 节'),
-        (13, '第 13 节'),
-        (14, '第 14 节'),
-    )
-    weekday = forms.ChoiceField(choices=WEEKDAY_CHOICES)
-    begin = forms.ChoiceField(choices=COURSE_TIME_CHOICES)
-    end = forms.ChoiceField(choices=COURSE_TIME_CHOICES)
+    weekday = forms.ChoiceField(choices=CourseTime.WEEKDAY_CHOICES)
+    begin = forms.ChoiceField(choices=CourseTime.COURSE_TIME_CHOICES)
+    end = forms.ChoiceField(choices=CourseTime.COURSE_TIME_CHOICES)
 
     def clean_course_id(self):
         id = self.cleaned_data['course_id']
@@ -184,3 +159,16 @@ class AddCourseTimeForm(forms.Form):
                 raise forms.ValidationError('该时间与已有时间冲突，请核对')
 
         return self.cleaned_data
+
+class AddExamForm(forms.Form):
+    course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+    method = forms.ChoiceField(choices=Exam.EXAM_METHOD_CHOICES)
+    date = forms.DateField(error_messages={'required': '考试时间不能为空'})
+    time = forms.TimeField(required=False)
+
+    def clean_course_id(self):
+        id = self.cleaned_data['course_id']
+        exists = Course.objects.filter(id=id).count()
+        if exists == 0:
+            raise forms.ValidationError('该课程不存在，请核对')
+        return id
