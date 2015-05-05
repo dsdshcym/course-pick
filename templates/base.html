@@ -14,11 +14,16 @@
                 <div class="title item">
                     <b>选课系统</b>
                 </div>
-                <a class="popup icon github item" data-content="View project on GitHub" href="https://github.com/dsdshcym/course-pick">
+                <a class="popup icon item" data-content="回到主页" href="/">
+                    <i class="home icon"></i>
+                </a>
+                <a class="popup icon github item" data-content="项目主页" href="https://github.com/dsdshcym/course-pick">
                     <i class="alternate github icon"></i>
                 </a>
                 {% if user.is_authenticated %}
-                <a class="item" href="/accounts/logout/">退出</a>
+                <a class="popup icon item" data-content="退出" href="/accounts/logout/">
+                    <i class="sign out icon"></i>
+                </a>
                 {% endif %}
                 <div class="ui right item" style="height:34px;padding-top: 5px;padding-top: 5px;">
                     <div class="ui search">
