@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 
 from accounts.models import Student, Teacher
 
@@ -153,9 +154,9 @@ class AddCourseTimeForm(forms.Form):
         return self.cleaned_data
 
 class AddExamForm(forms.Form):
-    course_id = forms.CharField(error_messages={'required': '课程号不能为空', 'max_length': '最多为 20 个字符'}, max_length=20)
+    course_id = forms.CharField(error_messages={'max_length': '最多为 20 个字符'}, max_length=20, required=False)
     method = forms.ChoiceField(choices=Exam.EXAM_METHOD_CHOICES)
-    date = forms.DateField(error_messages={'required': '考试时间不能为空'})
+    date = forms.DateField(error_messages={'required': '考试时间不能为空'}, widget=SelectDateWidget)
     time = forms.TimeField(required=False)
 
     def clean_course_id(self):
