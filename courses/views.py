@@ -134,18 +134,20 @@ def add_exam(request, course_id):
             date = form.cleaned_data['date']
             time = form.cleaned_data['time']
             try:
-                exam = Exam.objects.filter(course=course).update(
-                    method=method,
-                    date=date,
-                    time=time,
-                )
+                exam = Exam.objects.get(course=course)
+                exam.course=course
+                exam.method=method
+                exam.date=date
+                exam.time=time
             except:
-                exam = Exam.objects.create(
+                exam = Exam(
                     course=course,
                     method=method,
                     date=date,
                     time=time,
                 )
+            finally:
+                exam.save()
             form.success = '修改考试信息成功'
     else:
         form = AddExamForm()
