@@ -419,6 +419,12 @@ class SearchCourseTest(TestCase):
         )
         self.second_test_course.teacher.add(self.second_test_teacher)
 
+    def test_search_for_a_class_with_course_id(self):
+        response = self.client.get('/courses/search/0001', )
+        course_results = response.context['id_results']
+        self.assertEqual(course_results.count(), 1)
+        self.assertIn(self.first_test_course, course_results)
+
     def test_search_for_a_class_with_course_name(self):
         response = self.client.get('/courses/search/first_test_course', )
         course_results = response.context['course_results']
