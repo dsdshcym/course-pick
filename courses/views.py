@@ -75,7 +75,6 @@ def add_course_teacher(request, course_id):
             course = Course.objects.get(id=course_id)
             teacher = Teacher.objects.get(id=teacher_id)
             course.teacher.add(teacher)
-            return redirect('/courses/add/coursetime/'+course_id)
     else:
         form = AddCourseTeacherForm()
     return extra_info(request, course_id, form)
