@@ -25,7 +25,7 @@ def add_course(request):
                 remark             = form.cleaned_data['remark'],
             )
 
-            return redirect('/')
+            return redirect('/courses/extra/'+new_course.id)
     else:
         form = AddCourseForm()
 
@@ -55,6 +55,16 @@ def edit_course(request, course_id):
             }
             return render(request,  'courses/detail.html', context)
     return redirect('/courses/detail/' + course_id)
+
+@permission_required('courses.add_coursetime')
+def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), coursetime_form=AddCourseTimeForm()):
+    course = Course.objects.get(id=course_id)
+    context = {
+        'course_id': course_id,
+        'teacher_form': teacher_form,
+        'coursetime_form': coursetime_form,
+    }
+    return TemplateResponse(request, 'courses/extra_info.html', context)
 
 @permission_required('courses.change_course')
 def add_course_teacher(request, course_id):
