@@ -15,6 +15,11 @@
         {{ teacher_form.teacher_id.errors }}
     </div>
     {% endif %}
+    {% if teacher_form.success %}
+    <div class="ui message">
+        {{ teacher_form.success }}
+    </div>
+    {% endif %}
     <button class="ui green button">提交</button>
 </form>
 

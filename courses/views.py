@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
 
@@ -75,6 +77,8 @@ def add_course_teacher(request, course_id):
             course = Course.objects.get(id=course_id)
             teacher = Teacher.objects.get(id=teacher_id)
             course.teacher.add(teacher)
+            form = AddCourseTeacherForm()
+            form.success = '添加教师成功'
     else:
         form = AddCourseTeacherForm()
     return extra_info(request, course_id, form)
