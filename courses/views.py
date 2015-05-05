@@ -174,7 +174,7 @@ def student_view(request):
     try:
         student = user.student
     except:
-        redirect('/')
+        return redirect('/')
     WEEKDAY_ITER = {
         'Mon': 0,
         'Tue': 1,
