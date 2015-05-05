@@ -239,6 +239,24 @@ def student_view(request, message=None):
     return TemplateResponse(request, 'courses/student.html', context)
 
 @login_required
+def teacher_view(request, message=None):
+    user = request.user
+
+    try:
+        teacher = user.teacher
+    except:
+        return redirect('/')
+
+    courses = teacher.course_set.all()
+
+    context = {
+        'courses': courses,
+        'message': message,
+    }
+
+    return TemplateResponse(request, 'courses/teacher.html', context)
+
+@login_required
 def manager_view(request):
     user = request.user
 
