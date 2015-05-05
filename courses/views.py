@@ -48,8 +48,13 @@ def edit_course(request, course_id):
                 max_student_number = form.cleaned_data['max_student_number'],
                 remark             = form.cleaned_data['remark'],
             )
-
-            return redirect('/')
+        else:
+            form.id = course_id
+            context = {
+                'form': form,
+            }
+            return render(request,  'courses/detail.html', context)
+    return redirect('/courses/detail/' + course_id)
 
 @permission_required('courses.change_course')
 def add_course_teacher(request, course_id):
