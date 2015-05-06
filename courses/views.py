@@ -189,7 +189,6 @@ def pick_course(request):
         pass
     try:
         manager = request.user.manager
-        print form
         return detail(request, course_id, form)
     except:
         pass
