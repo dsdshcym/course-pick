@@ -204,10 +204,28 @@ def drop_course(request):
             student = Student.objects.get(id=student_id)
             course = Course.objects.get(id=course_id)
             course.student.remove(student)
-            message = '退课成功'
+            form.success = '退课成功'
+    try:
+        student = request.user.student
+        if hasattr(form, 'success'):
+            return student_view(request, form.success)
         else:
-            message = form['course_id'].errors[0]
-        return student_view(request, message)
+            return student_view(request, form['course_id'].errors[0])
+    except:
+        pass
+    try:
+        teacher = request.user.teacher
+        if hasattr(form, 'success'):
+            return teacher_view(request, form.success)
+        else:
+            return teacher_view(request, form['student_id'].errors[0])
+    except:
+        pass
+    try:
+        manager = request.user.manager
+        return detail(request, course_id, drop_course_form=form)
+    except:
+        pass
     return redirect('/')
 
 def search_course(request):
