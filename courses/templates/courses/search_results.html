@@ -5,13 +5,13 @@
     <thead>
         <th>课程编号</th>
         <th>课程名称</th>
-        <th>开课院系</th>
         <th>上课教室</th>
         <th>上课时间</th>
         <th>学分</th>
         <th>人数</th>
         <th>教师</th>
         <th>考试信息</th>
+        <th>开课院系</th>
         <th>备注</th>
     </thead>
     <tbody>
@@ -19,7 +19,6 @@
         <tr>
             <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</td>
             <td>{{ course.name }}</td>
-            <td>{{ course.college }}</td>
             <td>{{ course.classroom }}</td>
             <td>
                 {% for coursetime_info in course.get_coursetime_info %}
@@ -38,6 +37,7 @@
                 {{ course.get_exam_info.date }} <br>
                 {{ course.get_exam_info.time }} <br>
             </td>
+            <td>{{ course.college }}</td>
             <td>{{ course.remark }}</td>
         </tr>
         {% endfor %}
