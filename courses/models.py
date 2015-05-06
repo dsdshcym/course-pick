@@ -21,6 +21,9 @@ class Course(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_student_count(self):
+        return self.student.all().count()
+
     def get_teacher_info(self):
         result = []
         teachers = self.teacher.all()
