@@ -16,8 +16,7 @@ class LoginForm(forms.Form):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError('请输入正确的用户名、密码')
-                self.user_cache = authenticate(username = username, password=password)
+                self.add_error('password', '请输入正确的用户名、密码')
 
         return self.cleaned_data
 
@@ -39,7 +38,7 @@ class RegisterForm(forms.Form):
         id = self.cleaned_data['id']
         exists = User.objects.filter(username = id).count() > 0
         if exists:
-            raise forms.ValidationError('该用户名已被使用，请重新输入')
+            self.add_error('id', '该学号/工号已被使用，请重新输入')
         return id
 
     def clean(self):
