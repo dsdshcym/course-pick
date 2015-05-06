@@ -27,7 +27,7 @@ class AddCourseForm(forms.Form):
         id = self.cleaned_data['id']
         exists = Course.objects.filter(id=id).count()
         if exists > 0:
-            raise forms.ValidationError('该课程已添加，请添加其他课程或选择修改课程')
+            self.add_error('id', '该课程已添加，请添加其他课程或选择修改课程')
         return id
 
 class EditCourseForm(forms.Form):
@@ -108,7 +108,7 @@ class AddCourseTeacherForm(forms.Form):
         id = self.cleaned_data['teacher_id']
         exists = Teacher.objects.filter(id=id).count()
         if exists == 0:
-            raise forms.ValidationError('该教师未注册，请核对')
+            self.add_error('teacher_id', '该教师未注册，请核对')
         return id
 
 class AddCourseTimeForm(forms.Form):
@@ -121,7 +121,7 @@ class AddCourseTimeForm(forms.Form):
         id = self.cleaned_data['course_id']
         exists = Course.objects.filter(id=id).count()
         if exists == 0:
-            raise forms.ValidationError('该课程不存在，请核对')
+            self.add_error('course_id', '该课程不存在，请核对')
         return id
 
     def clean_begin(self):
@@ -166,5 +166,5 @@ class AddExamForm(forms.Form):
         id = self.cleaned_data['course_id']
         exists = Course.objects.filter(id=id).count()
         if exists == 0:
-            raise forms.ValidationError('该课程不存在，请核对')
+            self.add_error('该课程不存在，请核对')
         return id
