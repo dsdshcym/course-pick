@@ -51,8 +51,12 @@ class PickCourseForm(forms.Form):
 
     def clean_course_id(self):
         id = self.cleaned_data['course_id']
-        exists = Course.objects.filter(id=id).count()
-        if exists == 0:
+        try:
+            course = Course.objects.get(id=id)
+            count = course.get_student_count()
+            if count + 1 > course.max_student_number:
+                self.add_error('course_id', '该课程已满员')
+        except:
             self.add_error('course_id', '该课程不存在，请核对')
         return id
 
