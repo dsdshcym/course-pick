@@ -7,6 +7,7 @@
         <th>课程名称</th>
         <th>开课院系</th>
         <th>上课教室</th>
+        <th>上课时间</th>
         <th>学分</th>
         <th>人数</th>
         <th>教师</th>
@@ -19,6 +20,11 @@
             <td>{{ course.name }}</td>
             <td>{{ course.college }}</td>
             <td>{{ course.classroom }}</td>
+            <td>
+                {% for coursetime_info in course.get_coursetime_info %}
+                {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
+                {% endfor %}
+            </td>
             <td>{{ course.score }}</td>
             <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
             <td>
