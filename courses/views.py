@@ -173,7 +173,7 @@ def pick_course(request):
             form.success = '选课成功'
     try:
         student = request.user.student
-        if form.success:
+        if hasattr(form, 'success'):
             return student_view(request, form.success)
         else:
             return student_view(request, form['course_id'].errors[0])
@@ -181,7 +181,7 @@ def pick_course(request):
         pass
     try:
         teacher = request.user.teacher
-        if form.success:
+        if hasattr(form, 'success'):
             return teacher_view(request, form.success)
         else:
             return teacher_view(request, form['student_id'].errors[0])
