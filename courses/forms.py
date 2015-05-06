@@ -95,10 +95,11 @@ class DropCourseForm(forms.Form):
     def clean(self):
         student_id = self.cleaned_data['student_id']
         course_id = self.cleaned_data['course_id']
-        student = Student.objects.get(id=student_id)
-        course = Course.objects.get(id=course_id)
-        if student not in course.student.all():
-            self.add_error('course_id', '不能退未选的课程')
+        if not self.errors:
+            student = Student.objects.get(id=student_id)
+            course = Course.objects.get(id=course_id)
+            if student not in course.student.all():
+                self.add_error('course_id', '不能退未选的课程')
         return self.cleaned_data
 
 class AddCourseTeacherForm(forms.Form):
