@@ -21,6 +21,16 @@ class Course(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_teacher_info(self):
+        result = []
+        teachers = self.teacher.all()
+        for teacher in teachers:
+            result.append({
+                'name': teacher.name,
+                'title': teacher.title,
+            })
+        return result
+
 class Exam(models.Model):
     """
     A Course's Final Exam informations
