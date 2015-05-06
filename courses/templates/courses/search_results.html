@@ -8,7 +8,7 @@
         <th>开课院系</th>
         <th>上课教室</th>
         <th>学分</th>
-        <th>最大学生人数</th>
+        <th>人数</th>
         <th>教师</th>
         <th>备注</th>
     </thead>
@@ -20,7 +20,7 @@
             <td>{{ course.college }}</td>
             <td>{{ course.classroom }}</td>
             <td>{{ course.score }}</td>
-            <td>{{ course.max_student_number }}</td>
+            <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
             <td>
                 {% for teacher_info in course.get_teacher_info %}
                 {{ teacher_info.title }} {{ teacher_info.name }} <br>
