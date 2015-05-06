@@ -99,7 +99,7 @@
 {% if user.manager %}
 <form class="ui form" action="/courses/pick/" method="post">
     {% csrf_token %}
-    <h4 class="ui dividing header">添加学生</h4>
+    <h4 class="ui dividing header">学生选课</h4>
     <div class="field">
         <label for="">学生学号</label>
         <div class="ui input">
@@ -117,6 +117,31 @@
     {% if pick_course_form.success %}
     <div class="ui message">
         {{ pick_course_form.success }}
+    </div>
+    {% endif %}
+    <button class="ui green button">提交</button>
+</form>
+
+<form class="ui form" action="/courses/drop/" method="post">
+    {% csrf_token %}
+    <h4 class="ui dividing header">学生退课</h4>
+    <div class="field">
+        <label for="">学生学号</label>
+        <div class="ui input">
+            {{ drop_course_form.student_id }}
+        </div>
+    </div>
+    <div class="field" style="display:none;">
+        <input name="course_id" value="{{ form.id }}"">
+    </div>
+    {% if drop_course_form.errors %}
+    <div class="ui message">
+        {{ drop_course_form.errors }}
+    </div>
+    {% endif %}
+    {% if drop_course_form.success %}
+    <div class="ui message">
+        {{ drop_course_form.success }}
     </div>
     {% endif %}
     <button class="ui green button">提交</button>
