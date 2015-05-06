@@ -303,7 +303,7 @@ def manager_view(request):
 
     return render(request, 'courses/manager.html')
 
-def detail(request, course_id, pick_course_form=PickCourseForm()):
+def detail(request, course_id, pick_course_form=PickCourseForm(), drop_course_form=DropCourseForm()):
     course = Course.objects.get(id=course_id)
     form = EditCourseForm(
         {
@@ -319,5 +319,6 @@ def detail(request, course_id, pick_course_form=PickCourseForm()):
     context = {
         'form': form,
         'pick_course_form': pick_course_form,
+        'drop_course_form': drop_course_form,
     }
     return TemplateResponse(request, 'courses/detail.html', context)
