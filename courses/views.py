@@ -198,9 +198,9 @@ def pick_course(request):
 def drop_course(request):
     if request.method == 'POST':
         form = DropCourseForm(request.POST)
+        course_id = request.POST['course_id']
         if form.is_valid():
-            student_id = request.POST['student_id']
-            course_id = request.POST['course_id']
+            student_id = form.cleaned_data['student_id']
             student = Student.objects.get(id=student_id)
             course = Course.objects.get(id=course_id)
             course.student.remove(student)
