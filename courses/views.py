@@ -164,16 +164,35 @@ def delete_course(request):
 def pick_course(request):
     if request.method == 'POST':
         form = PickCourseForm(request.POST)
+        course_id = request.POST['course_id']
         if form.is_valid():
             student_id = form.cleaned_data['student_id']
-            course_id = form.cleaned_data['course_id']
             student = Student.objects.get(id=student_id)
             course = Course.objects.get(id=course_id)
             course.student.add(student)
-            message = '选课成功'
+            form.success = '选课成功'
+    try:
+        student = request.user.student
+        if form.success:
+            return student_view(request, form.success)
         else:
-            message = form['course_id'].errors[0]
-        return student_view(request, message)
+            return student_view(request, form['course_id'].errors[0])
+    except:
+        pass
+    try:
+        teacher = request.user.teacher
+        if form.success:
+            return teacher_view(request, form.success)
+        else:
+            return teacher_view(request, form['student_id'].errors[0])
+    except:
+        pass
+    try:
+        manager = request.user.manager
+        print form
+        return detail(request, course_id, form)
+    except:
+        pass
     return redirect('/')
 
 @login_required
@@ -267,7 +286,7 @@ def manager_view(request):
 
     return render(request, 'courses/manager.html')
 
-def detail(request, course_id):
+def detail(request, course_id, pick_course_form=PickCourseForm()):
     course = Course.objects.get(id=course_id)
     form = EditCourseForm(
         {
@@ -282,5 +301,6 @@ def detail(request, course_id):
     form.id = course_id
     context = {
         'form': form,
+        'pick_course_form': pick_course_form,
     }
     return TemplateResponse(request, 'courses/detail.html', context)
