@@ -88,8 +88,8 @@
             {{ form.remark }}
         </div>
     </div>
-    <a class="ui orange button" href="/courses/extra/{{ form.id }}">更多信息</a>
     {% if user.manager %}
+    <a class="ui orange button" href="/courses/extra/{{ form.id }}">更多信息</a>
     <div class="ui buttons">
     <button class="ui green button">提交</button>
     <input type="submit" class="ui red button" form="delete_form" value="删除课程"></button>
