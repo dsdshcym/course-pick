@@ -11,6 +11,7 @@
         <th>学分</th>
         <th>人数</th>
         <th>教师</th>
+        <th>考试信息</th>
         <th>备注</th>
     </thead>
     <tbody>
@@ -31,6 +32,11 @@
                 {% for teacher_info in course.get_teacher_info %}
                 {{ teacher_info.title }} {{ teacher_info.name }} <br>
                 {% endfor %}
+            </td>
+            <td>
+                {{ course.get_exam_info.method }} <br>
+                {{ course.get_exam_info.date }} <br>
+                {{ course.get_exam_info.time }} <br>
             </td>
             <td>{{ course.remark }}</td>
         </tr>
