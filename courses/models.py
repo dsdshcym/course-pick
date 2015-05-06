@@ -45,6 +45,20 @@ class Course(models.Model):
             })
         return result
 
+    def get_exam_info(self):
+        exam = self.exam
+        EXAM_METHOD_CHOICES = {
+            'KJ': '开卷',
+            'BJ': '闭卷',
+            'LW': '论文',
+        }
+        result = {
+            'method': EXAM_METHOD_CHOICES[exam.method],
+            'date': exam.date,
+            'time': exam.time,
+        }
+        return result
+
 class Exam(models.Model):
     """
     A Course's Final Exam informations
