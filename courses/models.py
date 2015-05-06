@@ -34,6 +34,17 @@ class Course(models.Model):
             })
         return result
 
+    def get_coursetime_info(self):
+        result = []
+        coursetimes = self.coursetime_set.all()
+        for coursetime in coursetimes:
+            result.append({
+                'weekday': coursetime.weekday,
+                'begin': coursetime.begin,
+                'end': coursetime.end,
+            })
+        return result
+
 class Exam(models.Model):
     """
     A Course's Final Exam informations
