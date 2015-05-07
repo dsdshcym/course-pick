@@ -20,7 +20,15 @@
         {{ teacher_form.success }}
     </div>
     {% endif %}
-    <button class="ui green button">提交</button>
+    <div class="ui buttons">
+        <button class="ui green button">提交</button>
+        <input class="ui red button" name="" type="submit" value="重新分配教师" form="clear_teacher_form"/>
+    </div>
+</form>
+
+<form action="/courses/clear_teacher/" method="post" id="clear_teacher_form">
+    {% csrf_token %}
+    <input name="course_id" value="{{ course_id }}" style="display:none;">
 </form>
 
 <form class="ui form" action="/courses/add/coursetime/{{ course_id }}" method="post">
