@@ -472,3 +472,60 @@ class StudentViewTest(TestCase):
     def test_student_view_returns_class_table_info(self):
         response = self.client.get('/courses/student/')
         self.assertIn(self.test_course_time, response.context['class_table'][0])
+
+class ClearExtraInfoTest(TestCase):
+    def setUp(self):
+        self.test_course = Course.objects.create(
+            id                 = TEST_COURSE_ID,
+            name               = TEST_COURSE_NAME,
+            college            = TEST_COURSE_COLLEGE,
+            classroom          = TEST_COURSE_CLASSROOM,
+            score              = TEST_COURSE_SCORE,
+            max_student_number = TEST_COURSE_MAX_STUDENT_NUMBER,
+            remark             = TEST_COURSE_REMARK,
+        )
+
+        self.test_coursetime = CourseTime.objects.create(
+            course  = self.test_course,
+            weekday = 'Mon',
+            begin   = 1,
+            end     = 4,
+        )
+
+        self.test_exam = Exam.objects.create(
+            course  = self.test_course,
+            method = Exam.KJ,
+            date   = timezone.now().date(),
+            time   = timezone.now().time(),
+        )
+
+        self.test_teacher = Teacher.objects.create(
+            id='t0001',
+            name='test_teacher',
+            user=User.objects.create(username='t0001',password=''),
+        )
+
+        self.test_course.teacher.add(self.test_teacher)
+
+        manager_user = User.objects.create(username='m0001', password='')
+
+        self.test_manager = Manager.objects.create(
+            id='m0001',
+            name='test_manager',
+            user=manager_user,
+        )
+
+        manager_user.user_permissions = MANAGER_PERMISSION
+
+    def test_a_manager_can_clear_course_teacher(self):
+        self.client.login(username='m0001', password='')
+
+        teacher_count_before = self.test_course.teacher.all().count()
+        self.assertEqual(teacher_count_before, 1)
+
+        response = self.client.post('/courses/clear_teacher/', {
+            'course_id': self.test_course.id,
+        })
+
+        teacher_count_after = self.test_course.teacher.all().count()
+        self.assertEqual(teacher_count_after, 0)
