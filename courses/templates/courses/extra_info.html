@@ -62,7 +62,15 @@
         {{ coursetime_form.success }}
     </div>
     {% endif %}
-    <button class="ui green button">提交</button>
+    <div class="ui buttons">
+        <button class="ui green button">提交</button>
+        <input class="ui red button" name="" type="submit" value="重新添加上课时间" form="clear_coursetime_form"/>
+    </div>
+</form>
+
+<form action="/courses/clear_coursetime/" method="post" id="clear_coursetime_form">
+    {% csrf_token %}
+    <input name="course_id" value="{{ course_id }}" style="display:none;">
 </form>
 
 <form class="ui form" action="/courses/add/exam/{{ course_id }}" method="post">
