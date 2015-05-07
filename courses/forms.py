@@ -136,7 +136,6 @@ class AddCourseTimeForm(forms.Form):
     def clean_end(self):
         begin = int(self.cleaned_data['begin'])
         end = int(self.cleaned_data['end'])
-        print end < begin
         if end < begin:
             self.add_error('end', '结束时间应在开始时间之后')
         return end
