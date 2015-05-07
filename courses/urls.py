@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^add/exam/(?P<course_id>.*)', views.add_exam, name='add_exam'),
     url(r'^detail/(?P<course_id>.*)', views.detail, name='detail'),
     url(r'^extra/(?P<course_id>.*)', views.extra_info, name='extra_info'),
+    url(r'^clear_teacher/', views.clear_teacher, name='clear_teacher'),
 ]

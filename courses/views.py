@@ -63,7 +63,6 @@ def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), courseti
     if exam_form is None:
         try:
             exam = course.exam
-            print exam
             exam_form = AddExamForm(
                 {
                     'course_id': course.id,
@@ -72,7 +71,6 @@ def extra_info(request, course_id, teacher_form=AddCourseTeacherForm(), courseti
                     'time': exam.time,
                 }
             )
-            print exam_form
         except:
             exam_form = AddExamForm()
     context = {
@@ -322,3 +320,12 @@ def detail(request, course_id, pick_course_form=PickCourseForm(), drop_course_fo
         'drop_course_form': drop_course_form,
     }
     return TemplateResponse(request, 'courses/detail.html', context)
+
+def clear_teacher(request):
+    teacher_form = AddCourseTeacherForm()
+    if request.method == 'POST':
+        course_id = request.POST['course_id']
+        course = Course.objects.get(id=course_id)
+        course.teacher.clear()
+        teacher_form.success = '清除教师信息成功，请添加正确的教师信息'
+    return extra_info(request, course_id, teacher_form=teacher_form)
