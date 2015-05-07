@@ -88,7 +88,7 @@
             {{ exam_form.date }}
         </div>
     </div>
-    <div class="field">
+    <div class="field" id="exam_time">
         <label for="">时间</label>
         <div class="ui input">
             {{ exam_form.time }}
@@ -106,4 +106,18 @@
     {% endif %}
     <button class="ui green button">提交</button>
 </form>
+{% endblock %}
+
+{% block script %}
+<script>
+ function toggle_exam_time() {
+     if ($("#id_method").val() != "LW") {
+         $('#exam_time').show()
+     } else {
+         $('#exam_time').hide()
+     }
+ }
+ toggle_exam_time()
+ $("#id_method").change(toggle_exam_time);
+</script>
 {% endblock %}
