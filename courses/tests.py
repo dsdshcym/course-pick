@@ -529,3 +529,16 @@ class ClearExtraInfoTest(TestCase):
 
         teacher_count_after = self.test_course.teacher.all().count()
         self.assertEqual(teacher_count_after, 0)
+
+    def test_a_manager_can_clear_course_coursetime(self):
+        self.client.login(username='m0001', password='')
+
+        coursetime_count_before = CourseTime.objects.filter(course=self.test_course).count()
+        self.assertEqual(coursetime_count_before, 1)
+
+        response = self.client.post('/courses/clear_coursetime/', {
+            'course_id': self.test_course.id,
+        })
+
+        coursetime_count_after = CourseTime.objects.filter(course=self.test_course).count()
+        self.assertEqual(coursetime_count_after, 0)
