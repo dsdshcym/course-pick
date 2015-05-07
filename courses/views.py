@@ -321,6 +321,7 @@ def detail(request, course_id, pick_course_form=PickCourseForm(), drop_course_fo
     }
     return TemplateResponse(request, 'courses/detail.html', context)
 
+# TODO: Need permission_required
 def clear_teacher(request):
     teacher_form = AddCourseTeacherForm()
     if request.method == 'POST':
@@ -329,3 +330,13 @@ def clear_teacher(request):
         course.teacher.clear()
         teacher_form.success = '清除教师信息成功，请添加正确的教师信息'
     return extra_info(request, course_id, teacher_form=teacher_form)
+
+# TODO: Need permission_required
+def clear_coursetime(request):
+    coursetime_form = AddCourseTimeForm()
+    if request.method == 'POST':
+        course_id = request.POST['course_id']
+        course = Course.objects.get(id=course_id)
+        course.coursetime_set.all().delete()
+        coursetime_form.success = '清除上课时间成功，请添加正确的上课时间'
+    return extra_info(request, course_id, coursetime_form=coursetime_form)
