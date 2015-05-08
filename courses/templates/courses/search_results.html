@@ -184,6 +184,12 @@
     </tbody>
 </table>
 {% endif %}
+
+{% if not teacher_results and not id_results and not course_results and not college_results %}
+<div class="ui message">
+    没有找到相关结果
+</div>
+{% endif %}
 {% endblock %}
 
 {% block script %}
