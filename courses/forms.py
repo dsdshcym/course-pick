@@ -61,6 +61,8 @@ class PickCourseForm(forms.Form):
         return id
 
     def clean(self):
+        if self.errors:
+            return self.cleaned_data
         student_id = self.cleaned_data['student_id']
         course_id = self.cleaned_data['course_id']
         if not self.errors:
@@ -141,6 +143,8 @@ class AddCourseTimeForm(forms.Form):
         return end
 
     def clean(self):
+        if self.errors:
+            return self.cleaned_data
         course_id = self.cleaned_data['course_id']
         course = Course.objects.get(id=course_id)
 
