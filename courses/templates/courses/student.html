@@ -48,7 +48,7 @@
 
     <div class="twelve wide column">
         <div class="ui segment">
-            <h5 class="ui dividing header">目前课表</h5>
+            <h4 class="ui dividing header">目前课表</h4>
             <table class="ui celled structured table center aligned">
                 <thead>
                     <tr>
@@ -68,7 +68,13 @@
                         <th>{{ forloop.counter }}</th>
                         {% for time in classtime %}
                         {% if time != None %}
-                        <td rowspan="{{ time.get_span }}" class="center aligned">{{ time.course }}</td>
+                        <td rowspan="{{ time.get_span }}" class="center aligned">
+                            <a href="/courses/detail/{{ time.course.id }}">{{ time.course.name }}</a> <br>
+                            {{ time.course.classroom }} <br>
+                            {% for teacher_info in time.course.get_teacher_info %}
+                            {{ teacher_info.name }} <br>
+                            {% endfor %}
+                        </td>
                         {% endif %}
                         {% endfor %}
                     </tr>
