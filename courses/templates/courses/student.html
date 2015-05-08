@@ -94,12 +94,16 @@
      ;
 
  $('#pick_section').click(function() {
-     $('#drop_form').hide()
-     $('#pick_form').show()
+     $('#drop_form').hide();
+     $('#drop_section').removeClass("active");
+     $('#pick_form').show();
+     $('#pick_section').addClass("active");
  })
  $('#drop_section').click(function() {
-     $('#pick_form').hide()
-     $('#drop_form').show()
+     $('#pick_form').hide();
+     $('#pick_section').removeClass("active");
+     $('#drop_form').show();
+     $('#drop_section').addClass("active");
  })
 </script>
 {% endif %}
