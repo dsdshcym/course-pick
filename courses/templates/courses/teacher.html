@@ -5,91 +5,104 @@
     {{ message }}
 </div>
 {% endif %}
-<form class="ui form" action="/courses/pick/" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">学生选课</h4>
-    <div class="field">
-        <label for="">课程号</label>
-        <select class="ui search dropdown" name="course_id">
-            {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="field">
-        <label for="">学生学号</label>
-        <div class="ui input icon">
-            <i class="add user icon"></i>
-            <input name="student_id" type="text" value=""/>
+<div class="ui two column grid">
+    <div class="four wide column">
+        <div class="ui segment">
+            <div class="ui breadcrumb">
+                <a class="ui active section" id="pick_section">学生选课</a>
+                <div class="ui divider"> / </div>
+                <a class="ui section" id="drop_section">学生退课</a>
+            </div>
+            <form class="ui form" action="/courses/pick/" method="post" id="pick_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">课程号</label>
+                    <select class="ui search dropdown" name="course_id">
+                        {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="">学生学号</label>
+                    <div class="ui input icon">
+                        <i class="add user icon"></i>
+                        <input name="student_id" type="text" value=""/>
+                    </div>
+                </div>
+                <button class="ui green button">提交</button>
+            </form>
+
+            <form class="ui form" action="/courses/drop/" method="post" id="drop_form" style="display:none;">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">课程号</label>
+                    <select class="ui search dropdown" name="course_id">
+                        {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="">学生学号</label>
+                    <div class="ui input icon">
+                        <i class="remove user icon"></i>
+                        <input name="student_id" type="text" value=""/>
+                    </div>
+                </div>
+                <button class="ui green button">提交</button>
+            </form>
         </div>
     </div>
-    <button class="ui green button">提交</button>
-</form>
 
-<form class="ui form" action="/courses/drop/" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">学生退课</h4>
-    <div class="field">
-        <label for="">课程号</label>
-        <select class="ui search dropdown" name="course_id">
-            {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="field">
-        <label for="">学生学号</label>
-        <div class="ui input icon">
-            <i class="add user icon"></i>
-            <input name="student_id" type="text" value=""/>
+    <div class="twelve wide column">
+        <div class="ui segment">
+            <h4 class="ui dividing header">任教课程</h4>
+            <table class="ui celled sortable table">
+                <thead>
+                    <th>课程编号</th>
+                    <th>课程名称</th>
+                    <th>上课教室</th>
+                    <th>上课时间</th>
+                    <th>学分</th>
+                    <th>人数</th>
+                    <th>教师</th>
+                    <th>考试信息</th>
+                    <th>开课院系</th>
+                    <th>备注</th>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</a></td>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.classroom }}</td>
+                        <td>
+                            {% for coursetime_info in course.get_coursetime_info %}
+                            {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
+                            {% endfor %}
+                        </td>
+                        <td>{{ course.score }}</td>
+                        <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
+                        <td>
+                            {% for teacher_info in course.get_teacher_info %}
+                            {{ teacher_info.title }} {{ teacher_info.name }} <br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {{ course.get_exam_info.method }} <br>
+                            {{ course.get_exam_info.date }} <br>
+                            {{ course.get_exam_info.time }} <br>
+                        </td>
+                        <td>{{ course.college }}</td>
+                        <td>{{ course.remark }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    <button class="ui green button">提交</button>
-</form>
-
-<h4 class="ui dividing header">任教课程</h4>
-<table class="ui celled sortable table">
-    <thead>
-        <th>课程编号</th>
-        <th>课程名称</th>
-        <th>上课教室</th>
-        <th>上课时间</th>
-        <th>学分</th>
-        <th>人数</th>
-        <th>教师</th>
-        <th>考试信息</th>
-        <th>开课院系</th>
-        <th>备注</th>
-    </thead>
-    <tbody>
-        {% for course in courses %}
-        <tr>
-            <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</td>
-            <td>{{ course.name }}</td>
-            <td>{{ course.classroom }}</td>
-            <td>
-                {% for coursetime_info in course.get_coursetime_info %}
-                {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
-                {% endfor %}
-            </td>
-            <td>{{ course.score }}</td>
-            <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
-            <td>
-                {% for teacher_info in course.get_teacher_info %}
-                {{ teacher_info.title }} {{ teacher_info.name }} <br>
-                {% endfor %}
-            </td>
-            <td>
-                {{ course.get_exam_info.method }} <br>
-                {{ course.get_exam_info.date }} <br>
-                {{ course.get_exam_info.time }} <br>
-            </td>
-            <td>{{ course.college }}</td>
-            <td>{{ course.remark }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+</div>
 {% endblock %}
 
 {% block script %}
@@ -98,6 +111,19 @@
  $('select.dropdown')
           .dropdown()
      ;
+
+ $('#pick_section').click(function() {
+     $('#drop_form').hide();
+     $('#drop_section').removeClass("active");
+     $('#pick_form').show();
+     $('#pick_section').addClass("active");
+ })
+ $('#drop_section').click(function() {
+     $('#pick_form').hide();
+     $('#pick_section').removeClass("active");
+     $('#drop_form').show();
+     $('#drop_section').addClass("active");
+ })
 </script>
 {% endif %}
 {% endblock %}
