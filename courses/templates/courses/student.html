@@ -5,64 +5,79 @@
     {{ message }}
 </div>
 {% endif %}
-<form class="ui form" action="/courses/pick/" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">选课</h4>
-    <div class="field">
-        <label for="">课程号</label>
-        <div class="ui input icon">
-            <i class="book icon"></i>
-            <input name="course_id" type="text" value=""/>
+<div class="ui two column grid">
+    <div class="four wide column">
+        <div class="ui segment">
+            <div class="ui breadcrumb">
+                <a class="ui active section" id="pick_section">选课</a>
+                <div class="ui divider"> / </div>
+                <a class="ui section" id="drop_section">退课</a>
+            </div>
+            <form class="ui form" action="/courses/pick/" method="post" id="pick_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">课程号</label>
+                    <div class="ui input icon">
+                        <i class="book icon"></i>
+                        <input name="course_id" type="text" value=""/>
+                    </div>
+                </div>
+                <div style="display:none">
+                    <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+                    <input type="submit">
+                </div>
+            </form>
+
+            <form class="ui form" action="/courses/drop/" method="post" style="display:none;" id="drop_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">课程号</label>
+                    <select class="ui search dropdown" name="course_id">
+                        {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="display:none">
+                    <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+                    <input type="submit">
+                </div>
+            </form>
         </div>
     </div>
-    <div style="display:none">
-        <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
-        <input type="submit">
-    </div>
-</form>
 
-<form class="ui form" action="/courses/drop/" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">退课</h4>
-    <div class="field">
-        <label for="">课程号</label>
-        <select class="ui search dropdown" name="course_id">
-            {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
-            {% endfor %}
-        </select>
+    <div class="twelve wide column">
+        <div class="ui segment">
+            <h5 class="ui dividing header">目前课表</h5>
+            <table class="ui celled structured table center aligned">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th>周一</th>
+                        <th>周二</th>
+                        <th>周三</th>
+                        <th>周四</th>
+                        <th>周五</th>
+                        <th>周六</th>
+                        <th>周日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for classtime in class_table %}
+                    <tr>
+                        <th>{{ forloop.counter }}</th>
+                        {% for time in classtime %}
+                        {% if time != None %}
+                        <td rowspan="{{ time.get_span }}" class="center aligned">{{ time.course }}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div style="display:none">
-        <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
-        <input type="submit">
-    </div>
-</form>
-<table class="ui celled structured table">
-    <thead>
-        <tr>
-            <td></td>
-            <th>周一</th>
-            <th>周二</th>
-            <th>周三</th>
-            <th>周四</th>
-            <th>周五</th>
-            <th>周六</th>
-            <th>周日</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for classtime in class_table %}
-    <tr>
-        <th>{{ forloop.counter }}</th>
-        {% for time in classtime %}
-        {% if time != None %}
-        <td rowspan="{{ time.get_span }}" class="center aligned">{{ time.course }}</td>
-        {% endif %}
-        {% endfor %}
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+</div>
 {% endblock %}
 
 {% block script %}
@@ -71,6 +86,15 @@
  $('select.dropdown')
           .dropdown()
      ;
+
+ $('#pick_section').click(function() {
+     $('#drop_form').hide()
+     $('#pick_form').show()
+ })
+ $('#drop_section').click(function() {
+     $('#pick_form').hide()
+     $('#drop_form').show()
+ })
 </script>
 {% endif %}
 {% endblock %}
