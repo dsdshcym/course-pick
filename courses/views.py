@@ -182,7 +182,10 @@ def pick_course(request):
         if hasattr(form, 'success'):
             return teacher_view(request, form.success)
         else:
-            return teacher_view(request, form['student_id'].errors[0])
+            if form['student_id'].errors:
+                return teacher_view(request, form['student_id'].errors[0])
+            else:
+                return teacher_view(request, form['course_id'].errors[0])
     except:
         pass
     try:
@@ -216,7 +219,10 @@ def drop_course(request):
         if hasattr(form, 'success'):
             return teacher_view(request, form.success)
         else:
-            return teacher_view(request, form['student_id'].errors[0])
+            if form['student_id'].errors:
+                return teacher_view(request, form['student_id'].errors[0])
+            else:
+                return teacher_view(request, form['course_id'].errors[0])
     except:
         pass
     try:
