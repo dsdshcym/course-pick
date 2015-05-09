@@ -71,12 +71,6 @@
                 </div>
             </form>
         </div>
-        <div class="center aligned column">
-            <a class="ui huge orange labeled icon button" href="/courses/extra/{{ form.id }}">
-                <i class="signup icon"></i>
-                更多信息
-            </a>
-        </div>
 
         <div class="ui segment">
             <h4 class="ui dividing header">学生列表</h4>
@@ -204,7 +198,10 @@
         </form>
 
         <div class="ui segment">
-            <h4 class="ui dividing header">教师及考试信息</h4>
+            <a href="/courses/extra/{{ form.id }}">
+                <h4>相关信息</h4>
+            </a>
+            <div class="ui divider"> </div>
             <div class="ui list">
                 {% for teacher in teachers %}
                 <div class="item">
