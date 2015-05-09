@@ -212,14 +212,26 @@
                 </div>
                 {% endfor %}
             </div>
-            <div class="item">
-                <div class="header">
-                    {{ exam.method }}
+            <div class="ui list">
+                {% for coursetime in coursetimes %}
+                <div class="item">
+                    <div class="header">
+                        {{ coursetime.weekday }}
+                    </div>
+                    {{ coursetime.begin }} - {{ coursetime.end }}
                 </div>
-                {{ exam.date }}
-                {% if exam.time %}
-                {{ exam.time }}
-                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="ui list">
+                <div class="item">
+                    <div class="header">
+                        {{ exam.method }}
+                    </div>
+                    {{ exam.date }}
+                    {% if exam.time %}
+                    {{ exam.time }}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

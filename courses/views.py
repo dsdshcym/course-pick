@@ -327,6 +327,7 @@ def detail(request, course_id, pick_course_form=PickCourseForm(), drop_course_fo
         'teachers': course.get_teacher_info(),
         'exam': course.get_exam_info(),
         'students': course.student.all(),
+        'coursetimes': course.get_coursetime_info(),
     }
     return TemplateResponse(request, 'courses/detail.html', context)
 
