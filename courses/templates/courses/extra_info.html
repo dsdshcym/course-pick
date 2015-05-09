@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+课程相关信息
+{% endblock %}
+
 {% block content %}
 <h1 class="ui dividing header">#<a href="/courses/detail/{{ course_id }}">{{ course_id }}</a> 相关信息</h1>
 <div class="ui three column grid">
