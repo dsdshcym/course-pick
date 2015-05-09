@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block content %}
-{% if message %}
-<div class="ui message">
-    {{ message }}
-</div>
-{% endif %}
 <div class="ui two column grid">
     <div class="four wide column">
         <div class="ui segment">
+            {% if message %}
+            <div class="ui message">
+                {{ message }}
+            </div>
+            {% endif %}
             <div class="ui top attached tabular menu">
                 <a class="ui active item" id="pick_section">选课</a>
                 {% if courses %}
@@ -106,11 +106,11 @@
      $('#pick_form').show();
      $('#pick_section').addClass("active");
  })
- $('#drop_section').click(function() {
-     $('#pick_form').hide();
-     $('#pick_section').removeClass("active");
-     $('#drop_form').show();
-     $('#drop_section').addClass("active");
- })
+     $('#drop_section').click(function() {
+         $('#pick_form').hide();
+         $('#pick_section').removeClass("active");
+         $('#drop_form').show();
+         $('#drop_section').addClass("active");
+     })
 </script>
 {% endblock %}
