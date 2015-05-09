@@ -91,8 +91,8 @@
     {% if user.manager %}
     <a class="ui orange button" href="/courses/extra/{{ form.id }}">更多信息</a>
     <div class="ui buttons">
-    <button class="ui green button">提交</button>
-    <input type="submit" class="ui red button" form="delete_form" value="删除课程"></button>
+        <button class="ui green button">提交</button>
+        <input type="submit" class="ui red button" form="delete_form" value="删除课程"></button>
     </div>
     {% endif %}
 </form>
@@ -151,7 +151,7 @@
     {% csrf_token %}
     <input name="id" value="{{ form.id }}" style="display:none;">
     <div style="display:none;">
-    {{ form.name }}
+        {{ form.name }}
     </div>
 </form>
 {% endif %}
@@ -164,7 +164,7 @@
      $(this).attr('readonly', true);
  })
      $('#search_input').attr('readonly', false);
-     $('#id_remark').attr('readonly', true);
+ $('#id_remark').attr('readonly', true);
 </script>
 {% endif %}
 {% endblock %}
