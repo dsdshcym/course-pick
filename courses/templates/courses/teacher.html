@@ -8,12 +8,11 @@
 <div class="ui two column grid">
     <div class="four wide column">
         <div class="ui segment">
-            <div class="ui breadcrumb">
-                <a class="ui active section" id="pick_section">学生选课</a>
-                <div class="ui divider"> / </div>
-                <a class="ui section" id="drop_section">学生退课</a>
+            <div class="ui top attached tabular menu">
+                <a class="ui active item" id="pick_section">学生选课</a>
+                <a class="ui item" id="drop_section">学生退课</a>
             </div>
-            <form class="ui form" action="/courses/pick/" method="post" id="pick_form">
+            <form class="ui bottom attached segment form" action="/courses/pick/" method="post" id="pick_form">
                 {% csrf_token %}
                 <div class="field">
                     <label for="">课程号</label>
@@ -33,7 +32,7 @@
                 <button class="ui green button">提交</button>
             </form>
 
-            <form class="ui form" action="/courses/drop/" method="post" id="drop_form" style="display:none;">
+            <form class="ui bottom attached segment form" action="/courses/drop/" method="post" id="drop_form" style="display:none;">
                 {% csrf_token %}
                 <div class="field">
                     <label for="">课程号</label>
