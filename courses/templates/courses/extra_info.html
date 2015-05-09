@@ -1,115 +1,126 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form class="ui form" action="/courses/add/teacher/{{ course_id }}" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">添加教师</h4>
-    <div class="field">
-        <label for="">教师工号</label>
-        <div class="ui input">
-            {{ teacher_form.teacher_id }}
-        </div>
-    </div>
-    {% if teacher_form.errors %}
-    <div class="ui message">
-        {{ teacher_form.teacher_id.errors }}
-    </div>
-    {% endif %}
-    {% if teacher_form.success %}
-    <div class="ui message">
-        {{ teacher_form.success }}
-    </div>
-    {% endif %}
-    <div class="ui buttons">
-        <button class="ui green button">提交</button>
-        <input class="ui red button" name="" type="submit" value="重新分配教师" form="clear_teacher_form"/>
-    </div>
-</form>
+<h1 class="ui dividing header">#<a href="/courses/detail/{{ course_id }}">{{ course_id }}</a> 相关信息</h1>
+<div class="ui three column grid">
+    <div class="four wide column">
+        <form class="ui segment form" action="/courses/add/teacher/{{ course_id }}" method="post">
+            {% csrf_token %}
+            <h4 class="ui dividing header">添加教师</h4>
+            <div class="field">
+                <label for="">教师工号</label>
+                <div class="ui input">
+                    {{ teacher_form.teacher_id }}
+                </div>
+            </div>
+            {% if teacher_form.errors %}
+            <div class="ui message">
+                {{ teacher_form.teacher_id.errors }}
+            </div>
+            {% endif %}
+            {% if teacher_form.success %}
+            <div class="ui message">
+                {{ teacher_form.success }}
+            </div>
+            {% endif %}
+            <div class="ui buttons">
+                <button class="ui green button">添加</button>
+                <input class="ui red button" name="" type="submit" value="重新分配教师" form="clear_teacher_form"/>
+            </div>
+        </form>
 
-<form action="/courses/clear_teacher/" method="post" id="clear_teacher_form">
-    {% csrf_token %}
-    <input name="course_id" value="{{ course_id }}" style="display:none;">
-</form>
+        <form action="/courses/clear_teacher/" method="post" id="clear_teacher_form">
+            {% csrf_token %}
+            <input name="course_id" value="{{ course_id }}" style="display:none;">
+        </form>
+    </div>
 
-<form class="ui form" action="/courses/add/coursetime/{{ course_id }}" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">添加上课时间</h4>
-    <div class="field">
-        <label for="">星期</label>
-        <div class="ui input">
-            {{ coursetime_form.weekday }}
-        </div>
-    </div>
-    <div class="field">
-        <label for="">开始时间</label>
-        <div class="ui input">
-            {{ coursetime_form.begin }}
-        </div>
-    </div>
-    <div class="field">
-        <label for="">结束时间</label>
-        <div class="ui input">
-            {{ coursetime_form.end }}
-        </div>
-    </div>
-    {% if coursetime_form.errors %}
-    <div class="ui message">
-        {{ coursetime_form.errors }}
-    </div>
-    {% endif %}
-    {% if coursetime_form.success %}
-    <div class="ui message">
-        {{ coursetime_form.success }}
-    </div>
-    {% endif %}
-    <div class="ui buttons">
-        <button class="ui green button">提交</button>
-        <input class="ui red button" name="" type="submit" value="重新添加上课时间" form="clear_coursetime_form"/>
-    </div>
-</form>
+    <div class="four wide column">
+        <form class="ui segment form" action="/courses/add/coursetime/{{ course_id }}" method="post">
+            {% csrf_token %}
+            <h4 class="ui dividing header">添加上课时间</h4>
+            <div class="field">
+                <label for="">星期</label>
+                <div class="ui input">
+                    {{ coursetime_form.weekday }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="">开始时间</label>
+                <div class="ui input">
+                    {{ coursetime_form.begin }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="">结束时间</label>
+                <div class="ui input">
+                    {{ coursetime_form.end }}
+                </div>
+            </div>
+            {% if coursetime_form.errors %}
+            <div class="ui message">
+                {{ coursetime_form.errors }}
+            </div>
+            {% endif %}
+            {% if coursetime_form.success %}
+            <div class="ui message">
+                {{ coursetime_form.success }}
+            </div>
+            {% endif %}
+            <div class="ui buttons">
+                <button class="ui green button">添加</button>
+                <input class="ui red button" name="" type="submit" value="重新添加上课时间" form="clear_coursetime_form"/>
+            </div>
+        </form>
 
-<form action="/courses/clear_coursetime/" method="post" id="clear_coursetime_form">
-    {% csrf_token %}
-    <input name="course_id" value="{{ course_id }}" style="display:none;">
-</form>
+        <form action="/courses/clear_coursetime/" method="post" id="clear_coursetime_form">
+            {% csrf_token %}
+            <input name="course_id" value="{{ course_id }}" style="display:none;">
+        </form>
+    </div>
 
-<form class="ui form" action="/courses/add/exam/{{ course_id }}" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">考试信息</h4>
-    <div class="field">
-        <label for="">形式</label>
-        <div class="ui input">
-            {{ exam_form.method }}
-        </div>
+    <div class="eight wide column">
+        <form class="ui segment form" action="/courses/add/exam/{{ course_id }}" method="post">
+            {% csrf_token %}
+            <h4 class="ui dividing header">考试信息</h4>
+            <div class="field">
+                <label for="">形式</label>
+                <div class="ui input">
+                    {{ exam_form.method }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="">考试日期/论文截止</label>
+                <div class="ui input">
+                    {{ exam_form.date }}
+                </div>
+            </div>
+            <div class="field" id="exam_time">
+                <label for="">考试时间</label>
+                <div class="ui input">
+                    {{ exam_form.time }}
+                </div>
+            </div>
+            {% if exam_form.errors %}
+            <div class="ui message">
+                {{ exam_form.errors }}
+            </div>
+            {% endif %}
+            {% if exam_form.success %}
+            <div class="ui message">
+                {{ exam_form.success }}
+            </div>
+            {% endif %}
+            <button class="ui green button">提交</button>
+        </form>
     </div>
-    <div class="field">
-        <label for="">考试日期/论文截止</label>
-        <div class="ui input">
-            {{ exam_form.date }}
-        </div>
-    </div>
-    <div class="field" id="exam_time">
-        <label for="">考试时间</label>
-        <div class="ui input">
-            {{ exam_form.time }}
-        </div>
-    </div>
-    {% if exam_form.errors %}
-    <div class="ui message">
-        {{ exam_form.errors }}
-    </div>
-    {% endif %}
-    {% if exam_form.success %}
-    <div class="ui message">
-        {{ exam_form.success }}
-    </div>
-    {% endif %}
-    <button class="ui green button">提交</button>
-</form>
+</div>
 {% endblock %}
 
 {% block script %}
 <script>
+ $('select').addClass("ui selection dropdown");
+ $('select.dropdown').dropdown();
  function toggle_exam_time() {
      if ($("#id_method").val() != "LW") {
          $('#exam_time').show()
