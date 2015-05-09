@@ -9,6 +9,26 @@
     {% if user.manager %}
     <div class="four wide column">
         <div class="ui segment">
+            {% if pick_course_form.errors %}
+            <div class="ui message">
+                {{ pick_course_form.errors }}
+            </div>
+            {% endif %}
+            {% if drop_course_form.errors %}
+            <div class="ui message">
+                {{ drop_course_form.errors }}
+            </div>
+            {% endif %}
+            {% if pick_course_form.success %}
+            <div class="ui message">
+                {{ pick_course_form.success }}
+            </div>
+            {% endif %}
+            {% if drop_course_form.success %}
+            <div class="ui message">
+                {{ drop_course_form.success }}
+            </div>
+            {% endif %}
             <div class="ui top attached tabular menu">
                 <a class="ui active item" id="pick_section">学生选课</a>
                 <a class="ui item" id="drop_section">学生退课</a>
@@ -25,16 +45,6 @@
                 <div class="field" style="display:none;">
                     <input name="course_id" value="{{ form.id }}"">
                 </div>
-                {% if pick_course_form.errors %}
-                <div class="ui message">
-                    {{ pick_course_form.errors }}
-                </div>
-                {% endif %}
-                {% if pick_course_form.success %}
-                <div class="ui message">
-                    {{ pick_course_form.success }}
-                </div>
-                {% endif %}
                 <button class="ui green button">提交</button>
             </form>
 
@@ -50,16 +60,6 @@
                 <div class="field" style="display:none;">
                     <input name="course_id" value="{{ form.id }}"">
                 </div>
-                {% if drop_course_form.errors %}
-                <div class="ui message">
-                    {{ drop_course_form.errors }}
-                </div>
-                {% endif %}
-                {% if drop_course_form.success %}
-                <div class="ui message">
-                    {{ drop_course_form.success }}
-                </div>
-                {% endif %}
                 <button class="ui green button">提交</button>
             </form>
 
