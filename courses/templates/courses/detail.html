@@ -198,9 +198,13 @@
         </form>
 
         <div class="ui segment">
+            {% if user.manager %}
             <a href="/courses/extra/{{ form.id }}">
                 <h4>相关信息</h4>
             </a>
+            {% else %}
+            <h4>相关信息</h4>
+            {% endif %}
             <div class="ui divider"> </div>
             <div class="ui list">
                 {% for teacher in teachers %}
