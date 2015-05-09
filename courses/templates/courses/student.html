@@ -15,7 +15,9 @@
         <div class="ui segment">
             <div class="ui top attached tabular menu">
                 <a class="ui active item" id="pick_section">选课</a>
+                {% if courses %}
                 <a class="ui item" id="drop_section">退课</a>
+                {% endif %}
             </div>
             <form class="ui bottom attached segment form" action="/courses/pick/" method="post" id="pick_form">
                 {% csrf_token %}
@@ -32,6 +34,7 @@
                 </div>
             </form>
 
+            {% if courses %}
             <form class="ui bottom attached segment form" action="/courses/drop/" method="post" style="display:none;" id="drop_form">
                 {% csrf_token %}
                 <div class="field">
@@ -47,6 +50,7 @@
                     <input type="submit">
                 </div>
             </form>
+            {% endif %}
         </div>
     </div>
 
@@ -91,7 +95,6 @@
 {% endblock %}
 
 {% block script %}
-{% if courses %}
 <script>
  $('select.dropdown')
           .dropdown()
@@ -110,5 +113,4 @@
      $('#drop_section').addClass("active");
  })
 </script>
-{% endif %}
 {% endblock %}
