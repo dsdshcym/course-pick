@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
+{% if college_results %}
 <div class="ui segment">
-    {% if college_results %}
     <h4 class="ui dividing header">按开课院系搜索</h4>
     <div class="scroll">
         <table class="ui celled sortable table">
@@ -52,9 +52,11 @@
             </tbody>
         </table>
     </div>
-    {% endif %}
+</div>
+{% endif %}
 
-    {% if id_results %}
+{% if id_results %}
+<div class="ui segment">
     <h4 class="ui dividing header">按课程编号搜索</h4>
     <div class="scroll">
         <table class="ui celled sortable table">
@@ -100,9 +102,11 @@
             </tbody>
         </table>
     </div>
-    {% endif %}
+</div>
+{% endif %}
 
-    {% if course_results %}
+{% if course_results %}
+<div class="ui segment">
     <h4 class="ui dividing header">按课程名称搜索</h4>
     <div class="scroll">
         <table class="ui celled sortable table">
@@ -148,9 +152,11 @@
             </tbody>
         </table>
     </div>
-    {% endif %}
+</div>
+{% endif %}
 
-    {% if teacher_results %}
+{% if teacher_results %}
+<div class="ui segment">
     <h4 class="ui dividing header">按任课教师搜索</h4>
     <div class="scroll">
         <table class="ui celled sortable table">
@@ -196,13 +202,14 @@
             </tbody>
         </table>
     </div>
-    {% endif %}
+</div>
+{% endif %}
 
-    {% if not teacher_results and not id_results and not course_results and not college_results %}
-    <div class="ui message">
-        没有找到相关结果
-    </div>
-    {% endif %}
+{% if not teacher_results and not id_results and not course_results and not college_results %}
+<div class="ui message">
+    没有找到相关结果
+</div>
+{% endif %}
 </div>
 {% endblock %}
 
