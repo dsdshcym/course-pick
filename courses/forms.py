@@ -99,7 +99,7 @@ class DropCourseForm(forms.Form):
         return id
 
     def clean(self):
-        student_id = self.cleaned_data['student_id']
+        student_id = self.cleaned_data.get('student_id')
         course_id = self.cleaned_data['course_id']
         if not self.errors:
             student = Student.objects.get(id=student_id)
