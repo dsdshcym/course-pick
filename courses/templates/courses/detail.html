@@ -1,170 +1,201 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form class="ui form" action="/courses/edit/{{ form.id }}" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">课程信息</h4>
-    <div class="two fields">
-        <div class="field">
-            <label for="">课程编号</label>
-            <div class="ui input icon">
-                <i class="info icon"></i>
-                <input readonly name="id" value="{{ form.id }}">
-            </div>
-            {% if form.id.errors %}
-            <div class="ui message">
-                {{ form.id.errors }}
-            </div>
-            {% endif %}
-        </div>
-        <div class="field">
-            <label for="">课程名称</label>
-            <div class="ui input icon">
-                <i class="book icon"></i>
-                {{ form.name }}
-            </div>
-            {% if form.name.errors %}
-            <div class="ui message">
-                {{ form.name.errors }}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="two fields">
-        <div class="field">
-            <label for="">开课院系</label>
-            <div class="ui input icon">
-                <i class="student icon"></i>
-                {{ form.college }}
-            </div>
-            {% if form.college.errors %}
-            <div class="ui message">
-                {{ form.college.errors }}
-            </div>
-            {% endif %}
-        </div>
-        <div class="field">
-            <label for="">上课教室</label>
-            <div class="ui input icon">
-                <i class="building icon"></i>
-                {{ form.classroom }}
-            </div>
-            {% if form.classroom.errors %}
-            <div class="ui message">
-                {{ form.classroom.errors }}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="two fields">
-        <div class="field">
-            <label for="">学分</label>
-            <div class="ui input icon">
-                <i class="write icon"></i>
-                {{ form.score }}
-            </div>
-            {% if form.score.errors %}
-            <div class="ui message">
-                {{ form.score.errors }}
-            </div>
-            {% endif %}
-        </div>
-        <div class="field">
-            <label for="">最大学生人数</label>
-            <div class="ui input icon">
-                <i class="users icon"></i>
-                {{ form.max_student_number }}
-            </div>
-            {% if form.max_student_number.errors %}
-            <div class="ui message">
-                {{ form.max_student_number.errors }}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="field">
-        <label for="">备注</label>
-        <div class="ui input icon">
-            {{ form.remark }}
-        </div>
-    </div>
+<div class="ui two column grid" style="position: relative;">
     {% if user.manager %}
-    <a class="ui orange button" href="/courses/extra/{{ form.id }}">更多信息</a>
-    <div class="ui buttons">
-        <button class="ui green button">提交</button>
-        <input type="submit" class="ui red button" form="delete_form" value="删除课程"></button>
-    </div>
-    {% endif %}
-</form>
-{% if user.manager %}
-<form class="ui form" action="/courses/pick/" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">学生选课</h4>
-    <div class="field">
-        <label for="">学生学号</label>
-        <div class="ui input">
-            {{ pick_course_form.student_id }}
+    <div class="four wide column">
+        <div class="ui segment">
+            <div class="ui breadcrumb">
+                <a class="ui active section" id="pick_section">学生选课</a>
+                <div class="ui divider"> / </div>
+                <a class="ui section" id="drop_section">学生退课</a>
+            </div>
+            <form class="ui form" action="/courses/pick/" method="post" id="pick_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">学生学号</label>
+                    <div class="ui input icon">
+                        <i class="add user icon"></i>
+                        {{ pick_course_form.student_id }}
+                    </div>
+                </div>
+                <div class="field" style="display:none;">
+                    <input name="course_id" value="{{ form.id }}"">
+                </div>
+                {% if pick_course_form.errors %}
+                <div class="ui message">
+                    {{ pick_course_form.errors }}
+                </div>
+                {% endif %}
+                {% if pick_course_form.success %}
+                <div class="ui message">
+                    {{ pick_course_form.success }}
+                </div>
+                {% endif %}
+                <button class="ui green button">提交</button>
+            </form>
+
+            <form class="ui form" action="/courses/drop/" method="post" style="display:none;" id="drop_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">学生学号</label>
+                    <div class="ui input icon">
+                        <i class="remove user icon"></i>
+                        {{ drop_course_form.student_id }}
+                    </div>
+                </div>
+                <div class="field" style="display:none;">
+                    <input name="course_id" value="{{ form.id }}"">
+                </div>
+                {% if drop_course_form.errors %}
+                <div class="ui message">
+                    {{ drop_course_form.errors }}
+                </div>
+                {% endif %}
+                {% if drop_course_form.success %}
+                <div class="ui message">
+                    {{ drop_course_form.success }}
+                </div>
+                {% endif %}
+                <button class="ui green button">提交</button>
+            </form>
+
+            <form action="/courses/delete/" method="post" id="delete_form">
+                {% csrf_token %}
+                <input name="id" value="{{ form.id }}" style="display:none;">
+                <div style="display:none;">
+                    {{ form.name }}
+                </div>
+            </form>
+        </div>
+        <div class="center aligned column">
+            <a class="ui huge orange labeled icon button" href="/courses/extra/{{ form.id }}">
+                <i class="signup icon"></i>
+                更多信息
+            </a>
         </div>
     </div>
-    <div class="field" style="display:none;">
-        <input name="course_id" value="{{ form.id }}"">
-    </div>
-    {% if pick_course_form.errors %}
-    <div class="ui message">
-        {{ pick_course_form.errors }}
-    </div>
     {% endif %}
-    {% if pick_course_form.success %}
-    <div class="ui message">
-        {{ pick_course_form.success }}
+    <div class="twelve wide column">
+        <form class="ui segment form" action="/courses/edit/{{ form.id }}" method="post">
+            {% csrf_token %}
+            <h4 class="ui dividing header">课程信息</h4>
+            <div class="two fields">
+                <div class="field">
+                    <label for="">课程编号</label>
+                    <div class="ui input icon">
+                        <i class="info icon"></i>
+                        <input readonly name="id" value="{{ form.id }}">
+                    </div>
+                    {% if form.id.errors %}
+                    <div class="ui message">
+                        {{ form.id.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="field">
+                    <label for="">课程名称</label>
+                    <div class="ui input icon">
+                        <i class="book icon"></i>
+                        {{ form.name }}
+                    </div>
+                    {% if form.name.errors %}
+                    <div class="ui message">
+                        {{ form.name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label for="">开课院系</label>
+                    <div class="ui input icon">
+                        <i class="student icon"></i>
+                        {{ form.college }}
+                    </div>
+                    {% if form.college.errors %}
+                    <div class="ui message">
+                        {{ form.college.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="field">
+                    <label for="">上课教室</label>
+                    <div class="ui input icon">
+                        <i class="building icon"></i>
+                        {{ form.classroom }}
+                    </div>
+                    {% if form.classroom.errors %}
+                    <div class="ui message">
+                        {{ form.classroom.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label for="">学分</label>
+                    <div class="ui input icon">
+                        <i class="write icon"></i>
+                        {{ form.score }}
+                    </div>
+                    {% if form.score.errors %}
+                    <div class="ui message">
+                        {{ form.score.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="field">
+                    <label for="">最大学生人数</label>
+                    <div class="ui input icon">
+                        <i class="users icon"></i>
+                        {{ form.max_student_number }}
+                    </div>
+                    {% if form.max_student_number.errors %}
+                    <div class="ui message">
+                        {{ form.max_student_number.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="field">
+                <label for="">备注</label>
+                <div class="ui input icon">
+                    {{ form.remark }}
+                </div>
+            </div>
+            {% if user.manager %}
+            <div class="ui buttons">
+                <button class="ui green button">更改</button>
+                <input type="submit" class="ui red button" form="delete_form" value="删除课程"></button>
+            </div>
+            {% endif %}
+        </form>
     </div>
-    {% endif %}
-    <button class="ui green button">提交</button>
-</form>
-
-<form class="ui form" action="/courses/drop/" method="post">
-    {% csrf_token %}
-    <h4 class="ui dividing header">学生退课</h4>
-    <div class="field">
-        <label for="">学生学号</label>
-        <div class="ui input">
-            {{ drop_course_form.student_id }}
-        </div>
-    </div>
-    <div class="field" style="display:none;">
-        <input name="course_id" value="{{ form.id }}"">
-    </div>
-    {% if drop_course_form.errors %}
-    <div class="ui message">
-        {{ drop_course_form.errors }}
-    </div>
-    {% endif %}
-    {% if drop_course_form.success %}
-    <div class="ui message">
-        {{ drop_course_form.success }}
-    </div>
-    {% endif %}
-    <button class="ui green button">提交</button>
-</form>
-
-<form action="/courses/delete/" method="post" id="delete_form">
-    {% csrf_token %}
-    <input name="id" value="{{ form.id }}" style="display:none;">
-    <div style="display:none;">
-        {{ form.name }}
-    </div>
-</form>
-{% endif %}
+</div>
 {% endblock %}
 
 {% block script %}
-{% if not user.manager %}
 <script>
+{% if not user.manager %}
  $('input').each(function() {
      $(this).attr('readonly', true);
  })
      $('#search_input').attr('readonly', false);
  $('#id_remark').attr('readonly', true);
-</script>
+{% else %}
+ $('#pick_section').click(function() {
+     $('#drop_form').hide();
+     $('#drop_section').removeClass("active");
+     $('#pick_form').show();
+     $('#pick_section').addClass("active");
+ })
+ $('#drop_section').click(function() {
+     $('#pick_form').hide();
+     $('#pick_section').removeClass("active");
+     $('#drop_form').show();
+     $('#drop_section').addClass("active");
+ })
 {% endif %}
+</script>
 {% endblock %}
