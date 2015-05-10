@@ -1,0 +1,20 @@
+* 数据库期中 Project
+
+** 环境要求
+1. Python 2.7
+2. Django 1.8
+
+   推荐使用 pip 安装：
+
+   #+BEGIN_SRC shell
+   pip install django
+   #+END_SRC
+
+3. mysql
+
+   需要建数据库 CoursePick ，用户为 root ，密码为空
+
+   若要改用其他数据库请参考 Django 文档更改 =/course_pick/settings.py= 下的相关设置
+
+** 运行调试
+在根目录下运行 =python manage.py runserver= 即可

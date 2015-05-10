@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}
+添加课程
+{% endblock %}
+
+{% block content %}
+<form class="ui segment form" action="" method="post">
+    {% csrf_token %}
+    <h4 class="ui dividing header">添加课程</h4>
+    <div class="two fields">
+        <div class="field">
+            <label for="">课程编号</label>
+            <div class="ui input icon">
+                <i class="info icon"></i>
+                {{ form.id }}
+            </div>
+            {% if form.id.errors %}
+            <div class="ui message">
+                {{ form.id.errors }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            <label for="">课程名称</label>
+            <div class="ui input icon">
+                <i class="book icon"></i>
+                {{ form.name }}
+            </div>
+            {% if form.name.errors %}
+            <div class="ui message">
+                {{ form.name.errors }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label for="">开课院系</label>
+            <div class="ui input icon">
+                <i class="student icon"></i>
+                {{ form.college }}
+            </div>
+            {% if form.college.errors %}
+            <div class="ui message">
+                {{ form.college.errors }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            <label for="">上课教室</label>
+            <div class="ui input icon">
+                <i class="building icon"></i>
+                {{ form.classroom }}
+            </div>
+            {% if form.classroom.errors %}
+            <div class="ui message">
+                {{ form.classroom.errors }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label for="">学分</label>
+            <div class="ui input icon">
+                <i class="write icon"></i>
+                {{ form.score }}
+            </div>
+            {% if form.score.errors %}
+            <div class="ui message">
+                {{ form.score.errors }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            <label for="">最大学生人数</label>
+            <div class="ui input icon">
+                <i class="users icon"></i>
+                {{ form.max_student_number }}
+            </div>
+            {% if form.max_student_number.errors %}
+            <div class="ui message">
+                {{ form.max_student_number.errors }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="field">
+        <label for="">备注</label>
+        <div class="ui input icon">
+            <i class="icon"></i>
+            {{ form.remark }}
+        </div>
+    </div>
+    <button class="ui green button">提交</button>
+</form>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}注册{% endblock %}
+
+{% block content %}
+<div>
+    <div class="ui two column doubling ui grid">
+        <div class="ui column">
+            <div class="ui segment">
+                <form action="" method="post" class="ui form">
+                    {% csrf_token %}
+                    <h4 class="ui dividing header">注册</h4>
+                    <div class="field">
+                        <label>学号/工号</label>
+                        <div class="ui icon input">
+                            <i class="info icon"></i>
+                            {{ form.id }}
+                        </div>
+                        <div>
+                            {{ form.id.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>姓名</label>
+                        <div class="ui icon input">
+                            <i class="user icon"></i>
+                            {{ form.name }}
+                        </div>
+                        <div>
+                            {{ form.name.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>密码</label>
+                        <div class="ui icon input">
+                            <i class="lock icon"></i>
+                            {{ form.password }}
+                        </div>
+                        <div>
+                            {{ form.password.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>确认密码</label>
+                        <div class="ui icon input">
+                            <i class="repeat icon"></i>
+                            {{ form.confirm_password }}
+                        </div>
+                        <div>
+                            {{ form.confirm_password.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>用户组</label>
+                        {{ form.type }}
+                    </div>
+                    <div id="title_div" style="display:none;" class="field">
+                        <label>职称</label>
+                        <div class="ui icon input">
+                            <i class="tag icon"></i>
+                            {{ form.title }}
+                        </div>
+                    </div>
+                    <div class="ui two fluid buttons">
+                        <button class="ui green button">注册</button>
+                        <a class="ui animated button" href="/accounts/login/">
+                            <div class="visible content">已有帐号？</div>
+                            <div class="hidden content">登录</div>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment">
+                <p>欢迎来到选课系统，请注册</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#id_type").addClass("ui selection dropdown");
+     $('select.dropdown')
+                 .dropdown();
+    $("#id_type").change(function() {
+    if ($("#id_type").val() == "teacher") {
+        $('#title_div').show()
+    } else {
+        $('#title_div').hide()
+    }
+    });
+</script>
+{% endblock %}
+
+{% block isFixed %}
+fixed
+{% endblock %}

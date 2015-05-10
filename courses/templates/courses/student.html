@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}
+学生主页
+{% endblock %}
+
+{% block content %}
+<div class="ui two column grid">
+    <div class="four wide column">
+        <div class="ui segment">
+            {% if message %}
+            <div class="ui message">
+                {{ message }}
+            </div>
+            {% endif %}
+            <div class="ui top attached tabular menu">
+                <a class="ui active item" id="pick_section">选课</a>
+                {% if courses %}
+                <a class="ui item" id="drop_section">退课</a>
+                {% endif %}
+            </div>
+            <form class="ui bottom attached segment form" action="/courses/pick/" method="post" id="pick_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">课程号</label>
+                    <div class="ui input icon">
+                        <i class="book icon"></i>
+                        <input name="course_id" type="text" value=""/>
+                    </div>
+                </div>
+                <div style="display:none">
+                    <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+                    <input type="submit">
+                </div>
+            </form>
+
+            {% if courses %}
+            <form class="ui bottom attached segment form" action="/courses/drop/" method="post" style="display:none;" id="drop_form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="">课程号</label>
+                    <select class="ui search dropdown" name="course_id">
+                        {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.id }}: {{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="display:none">
+                    <input readonly name="student_id" type="text" value="{{ user.student.id }}"/>
+                    <input type="submit">
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="twelve wide column">
+        <div class="ui segment">
+            <h4 class="ui dividing header">目前课表</h4>
+            <table class="ui celled structured table center aligned">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th class="center aligned">周一</th>
+                        <th class="center aligned">周二</th>
+                        <th class="center aligned">周三</th>
+                        <th class="center aligned">周四</th>
+                        <th class="center aligned">周五</th>
+                        <th class="center aligned">周六</th>
+                        <th class="center aligned">周日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for classtime in class_table %}
+                    <tr>
+                        <th>{{ forloop.counter }}</th>
+                        {% for time in classtime %}
+                        {% if time != None %}
+                        <td rowspan="{{ time.get_span }}" class="center aligned">
+                            <a href="/courses/detail/{{ time.course.id }}">{{ time.course.name }}</a> <br>
+                            {{ time.course.classroom }} <br>
+                            {% for teacher_info in time.course.get_teacher_info %}
+                            {{ teacher_info.name }} <br>
+                            {% endfor %}
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+ $('select.dropdown')
+          .dropdown()
+     ;
+
+ $('#pick_section').click(function() {
+     $('#drop_form').hide();
+     $('#drop_section').removeClass("active");
+     $('#pick_form').show();
+     $('#pick_section').addClass("active");
+ })
+     $('#drop_section').click(function() {
+         $('#pick_form').hide();
+         $('#pick_section').removeClass("active");
+         $('#drop_form').show();
+         $('#drop_section').addClass("active");
+     })
+</script>
+{% endblock %}

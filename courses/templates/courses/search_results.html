@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}
+搜索结果
+{% endblock %}
+
+{% block content %}
+{% if college_results %}
+<div class="ui segment">
+    <h4 class="ui dividing header">按开课院系搜索</h4>
+    <div class="scroll">
+        <table class="ui celled sortable table">
+            <thead>
+                <th>课程编号</th>
+                <th>课程名称</th>
+                <th>上课教室</th>
+                <th>上课时间</th>
+                <th>学分</th>
+                <th>人数</th>
+                <th>教师</th>
+                <th>考试信息</th>
+                <th>开课院系</th>
+                <th>备注</th>
+            </thead>
+            <tbody>
+                {% for course in college_results %}
+                <tr>
+                    <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</a></td>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.classroom }}</td>
+                    <td>
+                        {% for coursetime_info in course.get_coursetime_info %}
+                        {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ course.score }}</td>
+                    <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
+                    <td>
+                        {% for teacher_info in course.get_teacher_info %}
+                        {{ teacher_info.title }} {{ teacher_info.name }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ course.get_exam_info.method }} <br>
+                        {{ course.get_exam_info.date }} <br>
+                        {{ course.get_exam_info.time }} <br>
+                    </td>
+                    <td>{{ course.college }}</td>
+                    <td>{{ course.remark }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if id_results %}
+<div class="ui segment">
+    <h4 class="ui dividing header">按课程编号搜索</h4>
+    <div class="scroll">
+        <table class="ui celled sortable table">
+            <thead>
+                <th>课程编号</th>
+                <th>课程名称</th>
+                <th>上课教室</th>
+                <th>上课时间</th>
+                <th>学分</th>
+                <th>人数</th>
+                <th>教师</th>
+                <th>考试信息</th>
+                <th>开课院系</th>
+                <th>备注</th>
+            </thead>
+            <tbody>
+                {% for course in id_results %}
+                <tr>
+                    <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</a></td>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.classroom }}</td>
+                    <td>
+                        {% for coursetime_info in course.get_coursetime_info %}
+                        {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ course.score }}</td>
+                    <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
+                    <td>
+                        {% for teacher_info in course.get_teacher_info %}
+                        {{ teacher_info.title }} {{ teacher_info.name }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ course.get_exam_info.method }} <br>
+                        {{ course.get_exam_info.date }} <br>
+                        {{ course.get_exam_info.time }} <br>
+                    </td>
+                    <td>{{ course.college }}</td>
+                    <td>{{ course.remark }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if course_results %}
+<div class="ui segment">
+    <h4 class="ui dividing header">按课程名称搜索</h4>
+    <div class="scroll">
+        <table class="ui celled sortable table">
+            <thead>
+                <th>课程编号</th>
+                <th>课程名称</th>
+                <th>上课教室</th>
+                <th>上课时间</th>
+                <th>学分</th>
+                <th>人数</th>
+                <th>教师</th>
+                <th>考试信息</th>
+                <th>开课院系</th>
+                <th>备注</th>
+            </thead>
+            <tbody>
+                {% for course in course_results %}
+                <tr>
+                    <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</a></td>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.classroom }}</td>
+                    <td>
+                        {% for coursetime_info in course.get_coursetime_info %}
+                        {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ course.score }}</td>
+                    <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
+                    <td>
+                        {% for teacher_info in course.get_teacher_info %}
+                        {{ teacher_info.title }} {{ teacher_info.name }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ course.get_exam_info.method }} <br>
+                        {{ course.get_exam_info.date }} <br>
+                        {{ course.get_exam_info.time }} <br>
+                    </td>
+                    <td>{{ course.college }}</td>
+                    <td>{{ course.remark }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if teacher_results %}
+<div class="ui segment">
+    <h4 class="ui dividing header">按任课教师搜索</h4>
+    <div class="scroll">
+        <table class="ui celled sortable table">
+            <thead>
+                <th>课程编号</th>
+                <th>课程名称</th>
+                <th>上课教室</th>
+                <th>上课时间</th>
+                <th>学分</th>
+                <th>人数</th>
+                <th>教师</th>
+                <th>考试信息</th>
+                <th>开课院系</th>
+                <th>备注</th>
+            </thead>
+            <tbody>
+                {% for course in teacher_results %}
+                <tr>
+                    <td><a href="/courses/detail/{{ course.id }}"">{{ course.id }}</a></td>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.classroom }}</td>
+                    <td>
+                        {% for coursetime_info in course.get_coursetime_info %}
+                        {{ coursetime_info.weekday }} {{ coursetime_info.begin }}-{{ coursetime_info.end }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ course.score }}</td>
+                    <td>{{ course.get_student_count }} / {{ course.max_student_number }}</td>
+                    <td>
+                        {% for teacher_info in course.get_teacher_info %}
+                        {{ teacher_info.title }} {{ teacher_info.name }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ course.get_exam_info.method }} <br>
+                        {{ course.get_exam_info.date }} <br>
+                        {{ course.get_exam_info.time }} <br>
+                    </td>
+                    <td>{{ course.college }}</td>
+                    <td>{{ course.remark }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if not teacher_results and not id_results and not course_results and not college_results %}
+<div class="ui message">
+    没有找到相关结果
+</div>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+
+<style>
+ .scroll {
+     width: 100%;
+     height: 200px;
+     overflow: scroll;
+ }
+</style>
+
+{% endblock %}

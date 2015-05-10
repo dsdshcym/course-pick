@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+教务员主页
+{% endblock %}
+
+{% block content %}
+<div class="ui middle aligned two column relaxed fitted stackable grid" style="position: relative">
+    <div class="center aligned column">
+        <a class="ui huge green labeled icon button" href="/courses/add/">
+            <i class="signup icon"></i>
+            添加课程
+        </a>
+    </div>
+    <div class="ui vertical divider">
+        Or
+    </div>
+    <div class="column">
+        <div class="ui segment">
+            <h4 class="ui dividing header">添加课程</h4>
+            <p>
+                请直接点击左边的按钮
+            </p>
+            <h4 class="ui dividing header">删改课程</h4>
+            <p>
+                请直接搜索课程
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

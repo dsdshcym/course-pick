@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}登录{% endblock %}
+
+{% block content %}
+<div>
+    <div class="ui two column doubling ui grid">
+        <div class="ui column">
+            <div class="ui segment">
+                <form method="post" action="" class="ui form">
+                    {% csrf_token %}
+                    <h4 class="ui dividing header">登录</h4>
+                    <div class="field">
+                        <label>用户名</label>
+                        <div class="ui input icon">
+                            <i class="user icon"></i>
+                            {{ form.username }}
+                        </div>
+                        <div class="ui error">
+                            {{ form.username.errors }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>密码</label>
+                        <div class="ui input icon">
+                            <i class="lock icon"></i>
+                            {{ form.password }}
+                        </div>
+                        <div class="ui error">
+                            {{ form.password.errors }}
+                        </div>
+                    </div>
+                    <div class="ui two fluid buttons">
+                        <button class="ui green button">登录</button>
+                        <a class="ui vertical animated button" href="/accounts/register/">
+                            <div class="visible content">还没帐号？</div>
+                            <div class="hidden content">注册</div>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment">
+                <p>欢迎来到选课系统，请登录</p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block script %}
+    {% endblock %}
+
+    {% block isFixed %}
+    fixed
+    {% endblock %}
