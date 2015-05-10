@@ -46,7 +46,10 @@ class Course(models.Model):
         return result
 
     def get_exam_info(self):
-        exam = self.exam
+        try:
+            exam = self.exam
+        except:
+            return None
         EXAM_METHOD_CHOICES = {
             'KJ': '开卷',
             'BJ': '闭卷',
