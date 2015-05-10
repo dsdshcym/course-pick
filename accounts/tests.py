@@ -176,16 +176,6 @@ class ManagerRegisterTest(TestCase):
         self.assertTrue(saved_user.has_perm('courses.change_course'))
         self.assertTrue(saved_user.has_perm('courses.delete_course'))
 
-class RegisterFormTest(TestCase):
-    def setUp(self):
-        self.test_form = RegisterForm({
-            'id': '123'
-        })
-
-    def test_fileds_errors(self):
-        # self.assertFieldOutput(self.test_form.password, {'', u'学号/工号不能为空'})
-        pass
-
 class LoginViewTest(TestCase):
     def setUp(self):
         self.test_student = Student.objects.create(
